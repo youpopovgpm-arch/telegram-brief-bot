@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Бриф для клиентов</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+        
+        body {
+            background: #f5f7fa;
+            padding: 20px;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 500px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 24px;
+            padding: 24px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        }
+        
+        h1 {
+            font-size: 28px;
+            color: #1a1a1a;
+            margin-bottom: 8px;
+            text-align: center;
+        }
+        
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 32px;
+            font-size: 15px;
+        }
+        
+        .form-group {
+            margin-bottom: 24px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #333;
+            font-size: 15px;
+        }
+        
+        input, select, textarea {
+            width: 100%;
+            padding: 14px 16px;
+            border: 2px solid #e9ecef;
+            border-radius: 14px;
+            font-size: 16px;
+            transition: all 0.2s;
+            background: white;
+        }
+        
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: #2AABEE;
+            box-shadow: 0 0 0 3px rgba(42,171,238,0.1);
+        }
+        
+        textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+        
+        button {
+            width: 100%;
+            padding: 18px;
+            background: #2AABEE;
+            color: white;
+            border: none;
+            border-radius: 16px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            margin-top: 16px;
+        }
+        
+        button:hover {
+            background: #229ED9;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(42,171,238,0.3);
+        }
+        
+        button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+        
+        .success-screen {
+            display: none;
+            text-align: center;
+            padding: 40px 20px;
+        }
+        
+        .success-screen.show {
+            display: block;
+        }
+        
+        .success-icon {
+            width: 80px;
+            height: 80px;
+            background: #2AABEE;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 40px;
+            margin: 0 auto 24px;
+        }
+        
+        .error {
+            color: #ff4d4f;
+            font-size: 13px;
+            margin-top: 5px;
+            display: none;
+        }
+        
+        .error.show {
+            display: block;
+        }
+        
+        input.invalid, select.invalid, textarea.invalid {
+            border-color: #ff4d4f;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Форма -->
+        <div id="formScreen">
+            <h1>📋 Бриф</h1>
+            <div class="subtitle">Заполните форму, и мы свяжемся с вами</div>
+            
+            <div class="form-group">
+                <label>1. Сфера деятельности *</label>
+                <select id="sphere" class="invalid" onchange="validateField(this)">
+                    <option value="">Выберите вариант</option>
+                    <option value="Маркетинг">Маркетинг</option>
+                    <option value="IT / Разработка">IT / Разработка</option>
+                    <option value="Дизайн / Креатив">Дизайн / Креатив</option>
+                    <option value="Образование">Образование</option>
+                    <option value="Другое">Другое</option>
+                </select>
+                <div class="error" id="sphereError">Выберите сферу деятельности</div>
+            </div>
+            
+            <div class="form-group">
+                <label>2. Бюджет проекта *</label>
+                <select id="budget" class="invalid" onchange="validateField(this)">
+                    <option value="">Выберите вариант</option>
+                    <option value="До 50 000 ₽">До 50 000 ₽</option>
+                    <option value="50 000 - 150 000 ₽">50 000 - 150 000 ₽</option>
+                    <option value="150 000 - 500 000 ₽">150 000 - 500 000 ₽</option>
+                    <option value="Более 500 000 ₽">Более 500 000 ₽</option>
+                    <option value="Не определились">Не определились</option>
+                </select>
+                <div class="error" id="budgetError">Выберите бюджет</div>
+            </div>
+            
+            <div class="form-group">
+                <label>3. Сроки *</label>
+                <select id="timeline" class="invalid" onchange="validateField(this)">
+                    <option value="">Выберите вариант</option>
+                    <option value="1-2 недели">1-2 недели</option>
+                    <option value="1 месяц">1 месяц</option>
+                    <option value="2-3 месяца">2-3 месяца</option>
+                    <option value="Более 3 месяцев">Более 3 месяцев</option>
+                    <option value="Гибкие сроки">Гибкие сроки</option>
+                </select>
+                <div class="error" id="timelineError">Выберите сроки</div>
+            </div>
+            
+            <div class="form-group">
+                <label>4. Подробности *</label>
+                <textarea id="details" class="invalid" placeholder="Опишите задачу, цели, пожелания..." oninput="validateField(this)"></textarea>
+                <div class="error" id="detailsError">Расскажите о проекте</div>
+            </div>
+            
+            <div class="form-group">
+                <label>5. Ваше имя *</label>
+                <input type="text" id="name" class="invalid" placeholder="Как к вам обращаться?" oninput="validateField(this)">
+                <div class="error" id="nameError">Введите имя</div>
+            </div>
+            
+            <div class="form-group">
+                <label>6. Контакт для связи *</label>
+                <input type="text" id="contact" class="invalid" placeholder="@username или телефон" oninput="validateField(this)">
+                <div class="error" id="contactError">Укажите контакт</div>
+            </div>
+            
+            <button id="submitBtn" onclick="submitForm()" disabled>📤 Отправить бриф</button>
+        </div>
+        
+        <!-- Экран успеха -->
+        <div id="successScreen" class="success-screen">
+            <div class="success-icon">✓</div>
+            <h2>Спасибо!</h2>
+            <p>Ваш бриф успешно отправлен.<br>Мы свяжемся с вами в ближайшее время.</p>
+            <button onclick="Telegram.WebApp.close()" style="margin-top: 20px;">Закрыть</button>
+        </div>
+    </div>
+
+    <script>
+        let tg = window.Telegram.WebApp;
+        tg.ready();
+        tg.expand();
+        
+        // Валидация полей
+        function validateField(field) {
+            const value = field.value.trim();
+            const isValid = value !== '';
+            const errorId = field.id + 'Error';
+            
+            if (isValid) {
+                field.classList.remove('invalid');
+                document.getElementById(errorId).classList.remove('show');
+            } else {
+                field.classList.add('invalid');
+                document.getElementById(errorId).classList.add('show');
+            }
+            
+            checkAllFields();
+        }
+        
+        // Проверка всех полей
+        function checkAllFields() {
+            const sphere = document.getElementById('sphere').value;
+            const budget = document.getElementById('budget').value;
+            const timeline = document.getElementById('timeline').value;
+            const details = document.getElementById('details').value.trim();
+            const name = document.getElementById('name').value.trim();
+            const contact = document.getElementById('contact').value.trim();
+            
+            const allFilled = sphere && budget && timeline && details && name && contact;
+            
+            document.getElementById('submitBtn').disabled = !allFilled;
+        }
+        
+        // Отправка формы
+        function submitForm() {
+            const data = {
+                sphere: document.getElementById('sphere').value,
+                budget: document.getElementById('budget').value,
+                timeline: document.getElementById('timeline').value,
+                details: document.getElementById('details').value.trim(),
+                name: document.getElementById('name').value.trim(),
+                contact: document.getElementById('contact').value.trim()
+            };
+            
+            console.log("Отправляем данные:", data);
+            tg.sendData(JSON.stringify(data));
+            
+            // Показываем экран успеха
+            document.getElementById('formScreen').style.display = 'none';
+            document.getElementById('successScreen').classList.add('show');
+        }
+    </script>
+</body>
+</html>
