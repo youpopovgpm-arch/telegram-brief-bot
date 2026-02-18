@@ -3,114 +3,119 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Бриф - ТЕСТ</title>
+<title>Бриф</title>
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;font-family:sans-serif}
-body{background:#f5f7fa;padding:20px}
-.container{max-width:500px;margin:0 auto;background:#fff;border-radius:16px;padding:20px;box-shadow:0 4px 12px rgba(0,0,0,.05)}
-h1{font-size:24px;margin-bottom:8px;text-align:center}
-.subtitle{text-align:center;color:#666;margin-bottom:24px;font-size:14px}
+body{background:var(--tg-theme-bg-color,#fff);padding:16px;padding-bottom:80px}
+.container{max-width:500px;margin:0 auto}
+h1{font-size:24px;margin-bottom:8px;text-align:center;color:var(--tg-theme-text-color,#000)}
+.subtitle{text-align:center;color:var(--tg-theme-hint-color,#999);margin-bottom:20px;font-size:14px}
 .form-group{margin-bottom:16px}
-label{display:block;margin-bottom:6px;font-weight:500;font-size:14px}
-input,select,textarea{width:100%;padding:12px;border:2px solid #e9ecef;border-radius:10px;font-size:16px}
-input:focus,select:focus,textarea:focus{outline:none;border-color:#2AABEE}
+label{display:block;margin-bottom:6px;font-weight:500;font-size:14px;color:var(--tg-theme-text-color,#000)}
+input,select,textarea{width:100%;padding:12px;border:1px solid #ddd;border-radius:10px;font-size:16px;background:var(--tg-theme-bg-color,#fff);color:var(--tg-theme-text-color,#000)}
+input:focus,select:focus,textarea:focus{outline:none;border-color:var(--tg-theme-button-color,#2AABEE)}
 textarea{min-height:80px;resize:vertical}
-button{width:100%;padding:16px;background:#2AABEE;color:#fff;border:none;border-radius:12px;font-size:16px;font-weight:600;cursor:pointer;margin-top:12px}
-button:disabled{background:#ccc;cursor:not-allowed}
-.debug{background:#fff3cd;padding:10px;border-radius:8px;margin-top:10px;font-size:12px;font-family:monospace;word-break:break-all}
+.required{color:#ff4444}
 </style>
 </head>
 <body>
 <div class="container">
-<h1>📋 Бриф (ТЕСТ)</h1>
-<div class="subtitle">Заполните форму</div>
+<h1>📋 Бриф на проект</h1>
+<div class="subtitle">Заполните информацию</div>
 
+<form id="briefForm">
 <div class="form-group">
-<label>Сфера деятельности</label>
-<select id="sphere">
-<option value="">Выберите</option>
+<label>Сфера деятельности <span class="required">*</span></label>
+<select id="sphere" required>
+<option value="">Выберите вариант</option>
 <option value="Маркетинг">Маркетинг</option>
-<option value="IT">IT</option>
-<option value="Дизайн">Дизайн</option>
+<option value="IT / Разработка">IT / Разработка</option>
+<option value="Дизайн / Креатив">Дизайн / Креатив</option>
+<option value="Образование">Образование</option>
+<option value="Другое">Другое</option>
 </select>
 </div>
 
 <div class="form-group">
-<label>Бюджет</label>
-<select id="budget">
-<option value="">Выберите</option>
-<option value="До 50к">До 50к</option>
-<option value="50-150к">50-150к</option>
-<option value="150-500к">150-500к</option>
+<label>Бюджет проекта <span class="required">*</span></label>
+<select id="budget" required>
+<option value="">Выберите вариант</option>
+<option value="До 50 000 ₽">До 50 000 ₽</option>
+<option value="50 000 - 150 000 ₽">50 000 - 150 000 ₽</option>
+<option value="150 000 - 500 000 ₽">150 000 - 500 000 ₽</option>
+<option value="Более 500 000 ₽">Более 500 000 ₽</option>
+<option value="Не определились">Не определились</option>
 </select>
 </div>
 
 <div class="form-group">
-<label>Сроки</label>
-<select id="timeline">
-<option value="">Выберите</option>
+<label>Сроки <span class="required">*</span></label>
+<select id="timeline" required>
+<option value="">Выберите вариант</option>
 <option value="1-2 недели">1-2 недели</option>
 <option value="1 месяц">1 месяц</option>
 <option value="2-3 месяца">2-3 месяца</option>
+<option value="Более 3 месяцев">Более 3 месяцев</option>
+<option value="Гибкие сроки">Гибкие сроки</option>
 </select>
 </div>
 
 <div class="form-group">
-<label>Подробности</label>
-<textarea id="details" placeholder="Опишите задачу..."></textarea>
+<label>Подробности <span class="required">*</span></label>
+<textarea id="details" required placeholder="Опишите задачу, цели, пожелания..."></textarea>
 </div>
 
 <div class="form-group">
-<label>Ваше имя</label>
-<input type="text" id="name" placeholder="Как к вам обращаться?">
+<label>Ваше имя <span class="required">*</span></label>
+<input type="text" id="name" required placeholder="Как к вам обращаться?">
 </div>
 
 <div class="form-group">
-<label>Контакт</label>
-<input type="text" id="contact" placeholder="@username или телефон">
+<label>Контакт для связи <span class="required">*</span></label>
+<input type="text" id="contact" required placeholder="@username или телефон">
 </div>
-
-<button id="sendBtn" onclick="send()">Отправить</button>
-
-<div class="debug" id="debug">Загрузка...</div>
+</form>
 </div>
 
 <script>
 let tg = window.Telegram.WebApp;
-let debugEl = document.getElementById('debug');
 
-function log(msg) {
-  debugEl.innerHTML += msg + '<br>';
-  console.log(msg);
-}
+// Инициализация
+tg.ready();
+tg.expand();
 
-log('✅ Script loaded');
+// Настройка главной кнопки
+tg.MainButton.text = "Отправить бриф";
+tg.MainButton.color = "#2AABEE";
+tg.MainButton.show();
 
-// Проверяем доступность Telegram WebApp
-if (typeof tg === 'undefined') {
-  log('❌ Telegram WebApp не найден!');
-} else {
-  log('✅ Telegram WebApp найден');
+// Проверка заполненности формы
+function checkForm() {
+  const sphere = document.getElementById('sphere').value;
+  const budget = document.getElementById('budget').value;
+  const timeline = document.getElementById('timeline').value;
+  const details = document.getElementById('details').value.trim();
+  const name = document.getElementById('name').value.trim();
+  const contact = document.getElementById('contact').value.trim();
   
-  try {
-    tg.ready();
-    log('✅ tg.ready() выполнен');
-    
-    tg.expand();
-    log('✅ tg.expand() выполнен');
-    
-    log(`🆔 User ID: ${tg.initDataUnsafe?.user?.id || 'N/A'}`);
-    log(`👤 Username: ${tg.initDataUnsafe?.user?.username || 'N/A'}`);
-    
-  } catch(e) {
-    log('❌ Ошибка init: ' + e.message);
+  const filled = sphere && budget && timeline && details && name && contact;
+  
+  if (filled) {
+    tg.MainButton.enable();
+  } else {
+    tg.MainButton.disable();
   }
 }
 
-function send() {
-  log('🔵 Кнопка нажата');
-  
+// Слушаем изменения в форме
+document.querySelectorAll('input, select, textarea').forEach(el => {
+  el.addEventListener('input', checkForm);
+  el.addEventListener('change', checkForm);
+});
+
+// Обработка нажатия главной кнопки
+tg.MainButton.onClick(function() {
   const data = {
     sphere: document.getElementById('sphere').value,
     budget: document.getElementById('budget').value,
@@ -120,33 +125,12 @@ function send() {
     contact: document.getElementById('contact').value.trim()
   };
   
-  log('📦 Данные собраны: ' + JSON.stringify(data));
-  
-  try {
-    const jsonStr = JSON.stringify(data);
-    log('🔄 JSON длина: ' + jsonStr.length);
-    
-    if (typeof tg.sendData === 'function') {
-      log('✅ tg.sendData существует');
-      tg.sendData(jsonStr);
-      log('✅ tg.sendData() вызван!');
-    } else {
-      log('❌ tg.sendData НЕ ФУНКЦИЯ!');
-    }
-    
-  } catch(e) {
-    log('❌ Ошибка отправки: ' + e.message);
-  }
-}
+  // Отправляем данные
+  tg.sendData(JSON.stringify(data));
+});
 
-// Проверяем доступность sendData
-setTimeout(() => {
-  if (typeof tg.sendData === 'function') {
-    log('✅ sendData доступен');
-  } else {
-    log('❌ sendData НЕ ДОСТУПЕН');
-  }
-}, 1000);
+// Начальная проверка
+checkForm();
 </script>
 </body>
 </html>
