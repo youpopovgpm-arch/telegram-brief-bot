@@ -2,336 +2,316 @@
 <html lang="ru">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 <title>Бриф на дизайн сайта</title>
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Geologica:wght@400;600;700&family=Inter:wght@400;500&display=swap" rel="stylesheet">
 <style>
-*{margin:0;padding:0;box-sizing:border-box}
-body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);padding:20px 16px 100px;min-height:100vh}
-.container{max-width:640px;margin:0 auto;background:#fff;border-radius:24px;box-shadow:0 20px 60px rgba(0,0,0,.3);overflow:hidden}
-.header{background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);padding:32px 24px;text-align:center;color:#fff}
-.header h1{font-size:28px;font-weight:700;margin-bottom:8px;letter-spacing:-.5px}
-.header p{font-size:15px;opacity:.9;font-weight:400}
-.content{padding:32px 24px}
-.section{margin-bottom:32px}
-.section:last-of-type{margin-bottom:0}
-.section-title{font-size:18px;font-weight:700;color:#1a1a1a;margin-bottom:16px;display:flex;align-items:center;gap:8px}
-.section-title::before{content:'';width:4px;height:20px;background:linear-gradient(135deg,#667eea,#764ba2);border-radius:2px}
-.field{margin-bottom:20px}
-.field:last-child{margin-bottom:0}
-label{display:block;font-size:14px;font-weight:600;color:#2d3748;margin-bottom:8px}
-label .req{color:#e53e3e;margin-left:2px}
-label .opt{color:#718096;font-weight:400;font-size:13px;margin-left:4px}
-input,select,textarea{width:100%;padding:14px 16px;border:2px solid #e2e8f0;border-radius:12px;font-size:15px;font-family:inherit;transition:all .2s;background:#fff;color:#2d3748}
-input:focus,select:focus,textarea:focus{outline:none;border-color:#667eea;box-shadow:0 0 0 3px rgba(102,126,234,.1)}
-textarea{min-height:100px;resize:vertical;line-height:1.6}
-.hint{font-size:13px;color:#718096;margin-top:6px;line-height:1.5}
-.checkbox-group{display:flex;flex-direction:column;gap:10px;margin-top:8px}
-.checkbox-item{display:flex;align-items:center;padding:12px 16px;border:2px solid #e2e8f0;border-radius:12px;cursor:pointer;transition:all .2s;background:#fff}
-.checkbox-item:hover{border-color:#cbd5e0}
-.checkbox-item.selected{background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);border-color:#667eea;color:#fff}
-.checkbox-item input{display:none}
-.checkbox-item label{cursor:pointer;user-select:none;font-size:14px;font-weight:500;flex:1}
-.checkbox-item.selected label{color:#fff}
-.progress{position:fixed;bottom:0;left:0;right:0;background:#fff;padding:16px;box-shadow:0 -4px 20px rgba(0,0,0,.1);z-index:100}
-.progress-inner{max-width:640px;margin:0 auto}
-.progress-bar{height:6px;background:#e2e8f0;border-radius:3px;overflow:hidden;margin-bottom:8px}
-.progress-fill{height:100%;background:linear-gradient(90deg,#667eea,#764ba2);transition:width .3s;border-radius:3px}
-.progress-text{text-align:center;font-size:13px;color:#718096;font-weight:500}
-select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%232d3748' d='M6 9L1 4h10z'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 16px center;padding-right:40px}
-.radio-group{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;margin-top:8px}
-.radio-item{padding:14px;border:2px solid #e2e8f0;border-radius:12px;text-align:center;cursor:pointer;transition:all .2s;font-size:14px;font-weight:500;background:#fff;color:#2d3748}
-.radio-item:hover{border-color:#cbd5e0}
-.radio-item.selected{background:linear-gradient(135deg,#667eea,#764ba2);border-color:#667eea;color:#fff;transform:translateY(-2px);box-shadow:0 4px 12px rgba(102,126,234,.3)}
-@media(max-width:640px){
-.container{border-radius:0;margin:-20px -16px 0}
-.header{padding:24px 20px}
-.header h1{font-size:24px}
-.content{padding:24px 20px}
-.section-title{font-size:17px}
-.radio-group{grid-template-columns:1fr}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --navy: #0F1F3D; --navy2: #1A3260; --blue: #2B5CE6;
+  --blue-lt: #EEF3FF; --text: #1A1A2E; --muted: #6B7280;
+  --border: #D1D9F0; --bg: #F7F9FF; --white: #fff;
 }
+body { font-family:'Inter',sans-serif; background:var(--bg); color:var(--text); line-height:1.6; -webkit-text-size-adjust:100%; padding-bottom:80px; }
+
+/* HEADER */
+.hdr { background:linear-gradient(135deg,var(--navy),var(--navy2)); padding:36px 20px 30px; text-align:center; }
+.hdr-badge { display:inline-block; background:rgba(43,92,230,.35); border:1px solid rgba(255,255,255,.2); color:#a5c0ff; font-size:11px; letter-spacing:2px; text-transform:uppercase; padding:4px 14px; border-radius:30px; margin-bottom:14px; }
+.hdr h1 { font-family:'Geologica',sans-serif; font-size:clamp(20px,5vw,28px); font-weight:700; color:#fff; margin-bottom:10px; }
+.hdr p { color:#a5c0ff; font-size:14px; max-width:460px; margin:0 auto 18px; }
+.hdr-pills { display:flex; flex-wrap:wrap; gap:6px; justify-content:center; }
+.hdr-pill { background:rgba(255,255,255,.1); border:1px solid rgba(255,255,255,.15); color:#c8d8ff; font-size:12px; padding:4px 12px; border-radius:20px; }
+
+/* PROGRESS */
+.prog { position:sticky; top:0; z-index:100; background:var(--white); border-bottom:1px solid var(--border); padding:9px 16px; display:flex; align-items:center; gap:10px; box-shadow:0 2px 8px rgba(0,0,0,.06); }
+.prog-lbl { font-size:12px; color:var(--muted); white-space:nowrap; }
+.prog-track { flex:1; height:6px; background:var(--border); border-radius:10px; overflow:hidden; }
+.prog-fill { height:100%; background:linear-gradient(90deg,var(--blue),#5b8aff); border-radius:10px; transition:width .4s; width:0; }
+.prog-pct { font-size:12px; font-weight:600; color:var(--blue); min-width:28px; }
+
+/* WRAP */
+.wrap { max-width:720px; margin:0 auto; padding:22px 14px 60px; }
+
+/* SECTION */
+.sec { background:var(--white); border-radius:12px; border:1px solid var(--border); box-shadow:0 2px 12px rgba(43,92,230,.07); margin-bottom:16px; overflow:hidden; }
+.sec-hdr { display:flex; align-items:center; gap:12px; padding:14px 18px; background:var(--navy); cursor:pointer; -webkit-tap-highlight-color:transparent; user-select:none; }
+.sec-hdr:active { background:var(--navy2); }
+.sec-num { width:30px; height:30px; border-radius:50%; background:rgba(43,92,230,.5); border:1.5px solid rgba(255,255,255,.25); display:flex; align-items:center; justify-content:center; font-family:'Geologica',sans-serif; font-size:12px; font-weight:700; color:#fff; flex-shrink:0; }
+.sec-title { font-family:'Geologica',sans-serif; font-size:14px; font-weight:600; color:#fff; flex:1; }
+.sec-arr { color:rgba(255,255,255,.5); font-size:16px; transition:transform .25s; }
+.sec.open .sec-arr { transform:rotate(180deg); }
+.sec-body { display:none; padding:4px 18px 18px; }
+.sec.open .sec-body { display:block; }
+
+/* FIELDS */
+.field { margin-top:16px; }
+.field label { display:block; font-size:13px; font-weight:500; color:var(--navy); margin-bottom:4px; }
+.field .hint { font-size:12px; color:var(--muted); margin-bottom:6px; font-style:italic; }
+input[type=text], input[type=email], input[type=tel], textarea, select {
+  width:100%; padding:11px 14px; border:1.5px solid var(--border); border-radius:10px;
+  font-family:'Inter',sans-serif; font-size:16px; color:var(--text); background:var(--bg);
+  outline:none; transition:border .2s,box-shadow .2s; resize:vertical;
+  -webkit-appearance:none; appearance:none;
+}
+input:focus, textarea:focus, select:focus { border-color:var(--blue); box-shadow:0 0 0 3px rgba(43,92,230,.1); background:#fff; }
+textarea { min-height:88px; }
+select { background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12'%3E%3Cpath fill='%231A1A2E' d='M6 9L1 4h10z'/%3E%3C/svg%3E"); background-repeat:no-repeat; background-position:right 14px center; padding-right:40px; }
+
+/* CHECKBOXES */
+.chk-group { display:flex; flex-wrap:wrap; gap:8px; margin-top:8px; }
+.chk-item { display:flex; align-items:center; gap:8px; padding:9px 14px; border:1.5px solid var(--border); border-radius:30px; cursor:pointer; background:var(--bg); user-select:none; -webkit-tap-highlight-color:transparent; transition:all .15s; min-height:44px; }
+.chk-item:active,.chk-item:hover { border-color:var(--blue); background:var(--blue-lt); }
+.chk-item.on { border-color:var(--blue); background:var(--blue-lt); }
+.chk-box { width:18px; height:18px; border:2px solid var(--border); border-radius:4px; background:#fff; display:flex; align-items:center; justify-content:center; flex-shrink:0; transition:all .15s; pointer-events:none; }
+.chk-item.on .chk-box { background:var(--blue); border-color:var(--blue); }
+.chk-box::after { content:''; display:none; width:5px; height:9px; border:2px solid #fff; border-top:none; border-left:none; transform:rotate(45deg) translate(-1px,-1px); }
+.chk-item.on .chk-box::after { display:block; }
+.chk-label { font-size:13px; color:var(--text); pointer-events:none; }
+.chk-item.on .chk-label { color:var(--navy); font-weight:500; }
+
+/* RADIO */
+.rad-group { display:flex; flex-wrap:wrap; gap:8px; margin-top:8px; }
+.rad-item { display:flex; align-items:center; gap:8px; padding:9px 14px; border:1.5px solid var(--border); border-radius:30px; cursor:pointer; background:var(--bg); user-select:none; -webkit-tap-highlight-color:transparent; transition:all .15s; min-height:44px; }
+.rad-item:active,.rad-item:hover { border-color:var(--blue); background:var(--blue-lt); }
+.rad-item.on { border-color:var(--blue); background:var(--blue-lt); }
+.rad-circle { width:16px; height:16px; border:2px solid var(--border); border-radius:50%; background:#fff; display:flex; align-items:center; justify-content:center; flex-shrink:0; transition:all .15s; pointer-events:none; }
+.rad-item.on .rad-circle { border-color:var(--blue); }
+.rad-circle::after { content:''; display:none; width:7px; height:7px; border-radius:50%; background:var(--blue); }
+.rad-item.on .rad-circle::after { display:block; }
+.rad-label { font-size:13px; color:var(--text); pointer-events:none; }
+.rad-item.on .rad-label { color:var(--navy); font-weight:500; }
+
+.g2 { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+@media(max-width:480px){ .g2 { grid-template-columns:1fr; } }
 </style>
 </head>
 <body>
-<div class="container">
-<div class="header">
-<h1>Бриф на дизайн сайта</h1>
-<p>Заполните форму, чтобы мы оценили ваш проект</p>
+
+<div class="hdr">
+  <div class="hdr-badge">Анкета для клиента</div>
+  <h1>Бриф на дизайн сайта</h1>
+  <p>Расскажите о вашем проекте — мы подготовим предложение специально для вас</p>
+  <div class="hdr-pills">
+    <span class="hdr-pill">⏱ 7–10 минут</span>
+    <span class="hdr-pill">📋 9 разделов</span>
+    <span class="hdr-pill">📬 Отправка в Telegram</span>
+  </div>
 </div>
 
-<div class="content">
-<form id="briefForm">
+<div class="prog">
+  <span class="prog-lbl">Заполнено</span>
+  <div class="prog-track"><div class="prog-fill" id="pFill"></div></div>
+  <span class="prog-pct" id="pPct">0%</span>
+</div>
 
-<!-- Блок 1: О компании -->
-<div class="section">
-<div class="section-title">О компании и проекте</div>
+<div class="wrap">
+
+<!-- 01 О компании -->
+<div class="sec open" data-sec>
+<div class="sec-hdr" data-toggle><div class="sec-num">01</div><div class="sec-title">О компании и проекте</div><div class="sec-arr">▾</div></div>
+<div class="sec-body">
 
 <div class="field">
-<label>Название компании / проекта <span class="req">*</span></label>
-<input type="text" name="company" required data-track>
+<label>Название компании / проекта</label>
+<input type="text" name="company" data-t>
 </div>
 
 <div class="field">
-<label>Чем занимается компания? <span class="req">*</span></label>
-<textarea name="business" required data-track placeholder="2-3 предложения о бизнесе"></textarea>
-<div class="hint">Кратко опишите вашу деятельность</div>
+<label>Чем занимается компания?</label>
+<div class="hint">2-3 предложения о бизнесе</div>
+<textarea name="business" data-t></textarea>
 </div>
 
 <div class="field">
-<label>Что нужно сделать? <span class="req">*</span></label>
-<select name="task_type" required data-track>
+<label>Что нужно сделать?</label>
+<select name="task_type" data-t>
 <option value="">Выберите вариант</option>
 <option value="Дизайн нового сайта с нуля">Дизайн нового сайта с нуля</option>
-<option value="Редизайн существующего сайта">Редизайн существующего сайта</option>
+<option value="Редизайн существующего">Редизайн существующего сайта</option>
 <option value="Дизайн отдельных страниц">Дизайн отдельных страниц/разделов</option>
 <option value="Landing page">Landing page</option>
 </select>
 </div>
 
 <div class="field">
-<label>Текущий сайт <span class="opt">(если есть)</span></label>
-<input type="text" name="current_site" data-track placeholder="https://...">
-<div class="hint">Если сайта нет, оставьте пустым</div>
+<label>Текущий сайт (если есть)</label>
+<input type="text" name="current_site" data-t placeholder="https://...">
+</div>
+
 </div>
 </div>
 
-<!-- Блок 2: Тип и структура -->
-<div class="section">
-<div class="section-title">Тип и структура сайта</div>
+<!-- 02 Тип и структура -->
+<div class="sec" data-sec>
+<div class="sec-hdr" data-toggle><div class="sec-num">02</div><div class="sec-title">Тип и структура сайта</div><div class="sec-arr">▾</div></div>
+<div class="sec-body">
 
 <div class="field">
-<label>Тип сайта <span class="req">*</span></label>
-<select name="site_type" required data-track>
+<label>Тип сайта</label>
+<select name="site_type" data-t>
 <option value="">Выберите вариант</option>
 <option value="Корпоративный сайт">Корпоративный сайт</option>
-<option value="Интернет-магазин / каталог">Интернет-магазин / каталог</option>
+<option value="Интернет-магазин">Интернет-магазин / каталог</option>
 <option value="Лендинг">Лендинг / посадочная страница</option>
 <option value="Портфолио">Портфолио / креативный сайт</option>
-<option value="Блог / медиа">Блог / медиа-проект</option>
-<option value="Сервис / SaaS">Сервис / SaaS платформа</option>
+<option value="Блог">Блог / медиа-проект</option>
+<option value="Сервис">Сервис / SaaS платформа</option>
 <option value="Другое">Другое</option>
 </select>
 </div>
 
 <div class="field">
-<label>Количество страниц <span class="req">*</span></label>
-<div class="radio-group">
-<div class="radio-item" data-name="pages_count" data-value="1 страница">1 страница</div>
-<div class="radio-item" data-name="pages_count" data-value="3-5 страниц">3-5</div>
-<div class="radio-item" data-name="pages_count" data-value="5-10 страниц">5-10</div>
-<div class="radio-item" data-name="pages_count" data-value="10-20 страниц">10-20</div>
-<div class="radio-item" data-name="pages_count" data-value="20+ страниц">20+</div>
+<label>Количество страниц</label>
+<div class="rad-group" data-r="pages">
+<div class="rad-item" data-v="1 страница"><div class="rad-circle"></div><div class="rad-label">1 страница</div></div>
+<div class="rad-item" data-v="3-5"><div class="rad-circle"></div><div class="rad-label">3-5</div></div>
+<div class="rad-item" data-v="5-10"><div class="rad-circle"></div><div class="rad-label">5-10</div></div>
+<div class="rad-item" data-v="10-20"><div class="rad-circle"></div><div class="rad-label">10-20</div></div>
+<div class="rad-item" data-v="20+"><div class="rad-circle"></div><div class="rad-label">20+</div></div>
 </div>
 </div>
 
 <div class="field">
-<label>Ключевые разделы/страницы <span class="req">*</span></label>
-<textarea name="key_pages" required data-track placeholder="Главная, О компании, Услуги, Портфолио, Контакты..."></textarea>
-<div class="hint">Перечислите основные разделы через запятую</div>
+<label>Ключевые разделы/страницы</label>
+<div class="hint">Перечислите основные разделы</div>
+<textarea name="key_pages" data-t placeholder="Главная, О компании, Услуги, Портфолио, Контакты..."></textarea>
+</div>
+
 </div>
 </div>
 
-<!-- Блок 3: Целевая аудитория -->
-<div class="section">
-<div class="section-title">Цели и аудитория</div>
-
-<div class="field">
-<label>Целевая аудитория <span class="req">*</span></label>
-<textarea name="target_audience" required data-track placeholder="Кто будет пользоваться сайтом?"></textarea>
-<div class="hint">Возраст, интересы, потребности</div>
-</div>
+<!-- 03 Цели и аудитория -->
+<div class="sec" data-sec>
+<div class="sec-hdr" data-toggle><div class="sec-num">03</div><div class="sec-title">Цели и аудитория</div><div class="sec-arr">▾</div></div>
+<div class="sec-body">
 
 <div class="field">
-<label>Главные цели сайта <span class="req">*</span></label>
-<div class="checkbox-group">
-<div class="checkbox-item" data-name="goals">
-<input type="checkbox" value="Продажи">
-<label>Продажи товаров/услуг</label>
-</div>
-<div class="checkbox-item" data-name="goals">
-<input type="checkbox" value="Лиды">
-<label>Генерация лидов (заявок)</label>
-</div>
-<div class="checkbox-item" data-name="goals">
-<input type="checkbox" value="Презентация">
-<label>Презентация компании</label>
-</div>
-<div class="checkbox-item" data-name="goals">
-<input type="checkbox" value="Портфолио">
-<label>Показать портфолио работ</label>
-</div>
-<div class="checkbox-item" data-name="goals">
-<input type="checkbox" value="Контент">
-<label>Информирование / контент</label>
-</div>
-<div class="checkbox-item" data-name="goals">
-<input type="checkbox" value="Инвестиции">
-<label>Привлечение инвестиций</label>
-</div>
-</div>
-</div>
-</div>
-
-<!-- Блок 4: Дизайн -->
-<div class="section">
-<div class="section-title">Дизайн и стиль</div>
-
-<div class="field">
-<label>Примеры сайтов, которые нравятся <span class="opt">(желательно)</span></label>
-<textarea name="examples" data-track placeholder="Вставьте 2-3 ссылки и напишите что именно нравится"></textarea>
-<div class="hint">Это очень помогает понять ваши предпочтения</div>
+<label>Целевая аудитория</label>
+<div class="hint">Кто будет пользоваться сайтом? Возраст, интересы</div>
+<textarea name="target" data-t></textarea>
 </div>
 
 <div class="field">
-<label>Стиль дизайна <span class="req">*</span></label>
-<div class="checkbox-group">
-<div class="checkbox-item" data-name="style">
-<input type="checkbox" value="Минималистичный">
-<label>Минималистичный</label>
+<label>Главные цели сайта</label>
+<div class="chk-group" data-c="goals">
+<div class="chk-item" data-v="Продажи"><div class="chk-box"></div><div class="chk-label">Продажи товаров/услуг</div></div>
+<div class="chk-item" data-v="Лиды"><div class="chk-box"></div><div class="chk-label">Генерация лидов</div></div>
+<div class="chk-item" data-v="Презентация"><div class="chk-box"></div><div class="chk-label">Презентация компании</div></div>
+<div class="chk-item" data-v="Портфолио"><div class="chk-box"></div><div class="chk-label">Показать портфолио</div></div>
+<div class="chk-item" data-v="Контент"><div class="chk-box"></div><div class="chk-label">Информирование</div></div>
+<div class="chk-item" data-v="Инвестиции"><div class="chk-box"></div><div class="chk-label">Привлечение инвестиций</div></div>
 </div>
-<div class="checkbox-item" data-name="style">
-<input type="checkbox" value="Современный">
-<label>Современный / технологичный</label>
 </div>
-<div class="checkbox-item" data-name="style">
-<input type="checkbox" value="Корпоративный">
-<label>Корпоративный / строгий</label>
+
 </div>
-<div class="checkbox-item" data-name="style">
-<input type="checkbox" value="Яркий">
-<label>Яркий / креативный</label>
 </div>
-<div class="checkbox-item" data-name="style">
-<input type="checkbox" value="Премиум">
-<label>Премиум / люкс</label>
+
+<!-- 04 Дизайн -->
+<div class="sec" data-sec>
+<div class="sec-hdr" data-toggle><div class="sec-num">04</div><div class="sec-title">Дизайн и стиль</div><div class="sec-arr">▾</div></div>
+<div class="sec-body">
+
+<div class="field">
+<label>Примеры сайтов, которые нравятся</label>
+<div class="hint">2-3 ссылки и что именно нравится</div>
+<textarea name="examples" data-t placeholder="https://... — нравится цветовая гамма"></textarea>
 </div>
-<div class="checkbox-item" data-name="style">
-<input type="checkbox" value="Молодёжный">
-<label>Молодёжный / динамичный</label>
-</div>
+
+<div class="field">
+<label>Стиль дизайна</label>
+<div class="chk-group" data-c="style">
+<div class="chk-item" data-v="Минималистичный"><div class="chk-box"></div><div class="chk-label">Минималистичный</div></div>
+<div class="chk-item" data-v="Современный"><div class="chk-box"></div><div class="chk-label">Современный</div></div>
+<div class="chk-item" data-v="Корпоративный"><div class="chk-box"></div><div class="chk-label">Корпоративный</div></div>
+<div class="chk-item" data-v="Яркий"><div class="chk-box"></div><div class="chk-label">Яркий / креативный</div></div>
+<div class="chk-item" data-v="Премиум"><div class="chk-box"></div><div class="chk-label">Премиум / люкс</div></div>
+<div class="chk-item" data-v="Молодёжный"><div class="chk-box"></div><div class="chk-label">Молодёжный</div></div>
 </div>
 </div>
 
 <div class="field">
-<label>Цветовые предпочтения <span class="opt">(необязательно)</span></label>
-<input type="text" name="colors" data-track placeholder="Например: синий и белый, тёмная тема">
+<label>Цветовые предпочтения (необязательно)</label>
+<input type="text" name="colors" data-t placeholder="Например: синий и белый">
+</div>
+
 </div>
 </div>
 
-<!-- Блок 5: Функциональность -->
-<div class="section">
-<div class="section-title">Функциональность</div>
+<!-- 05 Функциональность -->
+<div class="sec" data-sec>
+<div class="sec-hdr" data-toggle><div class="sec-num">05</div><div class="sec-title">Функциональность</div><div class="sec-arr">▾</div></div>
+<div class="sec-body">
 
 <div class="field">
-<label>Необходимые функции <span class="req">*</span></label>
-<div class="checkbox-group">
-<div class="checkbox-item" data-name="functions">
-<input type="checkbox" value="Форма заявки">
-<label>Форма заявки / обратной связи</label>
-</div>
-<div class="checkbox-item" data-name="functions">
-<input type="checkbox" value="Онлайн-чат">
-<label>Онлайн-чат</label>
-</div>
-<div class="checkbox-item" data-name="functions">
-<input type="checkbox" value="CRM">
-<label>Интеграция с CRM</label>
-</div>
-<div class="checkbox-item" data-name="functions">
-<input type="checkbox" value="Калькулятор">
-<label>Калькулятор / конфигуратор</label>
-</div>
-<div class="checkbox-item" data-name="functions">
-<input type="checkbox" value="Личный кабинет">
-<label>Личный кабинет пользователя</label>
-</div>
-<div class="checkbox-item" data-name="functions">
-<input type="checkbox" value="Блог">
-<label>Блог / новости</label>
-</div>
-<div class="checkbox-item" data-name="functions">
-<input type="checkbox" value="Корзина">
-<label>Корзина и оплата</label>
-</div>
-<div class="checkbox-item" data-name="functions">
-<input type="checkbox" value="Поиск">
-<label>Фильтры и поиск</label>
-</div>
-<div class="checkbox-item" data-name="functions">
-<input type="checkbox" value="Мультиязычность">
-<label>Мультиязычность</label>
-</div>
-<div class="checkbox-item" data-name="functions">
-<input type="checkbox" value="Анимации">
-<label>Анимации / интерактив</label>
-</div>
+<label>Необходимые функции</label>
+<div class="chk-group" data-c="functions">
+<div class="chk-item" data-v="Форма заявки"><div class="chk-box"></div><div class="chk-label">Форма заявки</div></div>
+<div class="chk-item" data-v="Онлайн-чат"><div class="chk-box"></div><div class="chk-label">Онлайн-чат</div></div>
+<div class="chk-item" data-v="CRM"><div class="chk-box"></div><div class="chk-label">Интеграция с CRM</div></div>
+<div class="chk-item" data-v="Калькулятор"><div class="chk-box"></div><div class="chk-label">Калькулятор</div></div>
+<div class="chk-item" data-v="Личный кабинет"><div class="chk-box"></div><div class="chk-label">Личный кабинет</div></div>
+<div class="chk-item" data-v="Блог"><div class="chk-box"></div><div class="chk-label">Блог / новости</div></div>
+<div class="chk-item" data-v="Корзина"><div class="chk-box"></div><div class="chk-label">Корзина и оплата</div></div>
+<div class="chk-item" data-v="Поиск"><div class="chk-box"></div><div class="chk-label">Фильтры и поиск</div></div>
+<div class="chk-item" data-v="Мультиязычность"><div class="chk-box"></div><div class="chk-label">Мультиязычность</div></div>
+<div class="chk-item" data-v="Анимации"><div class="chk-box"></div><div class="chk-label">Анимации</div></div>
 </div>
 </div>
 
 <div class="field">
-<label>Нужна ли разработка? <span class="req">*</span></label>
-<select name="development" required data-track>
+<label>Нужна ли разработка?</label>
+<select name="development" data-t>
 <option value="">Выберите вариант</option>
 <option value="Полная разработка на CMS">Да, полная разработка на CMS</option>
-<option value="Только вёрстка">Да, но только вёрстка (HTML/CSS)</option>
+<option value="Только вёрстка">Да, но только вёрстка</option>
 <option value="Только дизайн">Нет, только дизайн-макеты</option>
 <option value="Не уверен">Не уверен, посоветуйте</option>
 </select>
 </div>
-</div>
 
-<!-- Блок 6: Материалы -->
-<div class="section">
-<div class="section-title">Материалы</div>
-
-<div class="field">
-<label>Что уже есть? <span class="req">*</span></label>
-<div class="checkbox-group">
-<div class="checkbox-item" data-name="materials">
-<input type="checkbox" value="Логотип">
-<label>Логотип и фирменный стиль</label>
-</div>
-<div class="checkbox-item" data-name="materials">
-<input type="checkbox" value="Тексты">
-<label>Тексты для всех страниц</label>
-</div>
-<div class="checkbox-item" data-name="materials">
-<input type="checkbox" value="Фото">
-<label>Фото и изображения</label>
-</div>
-<div class="checkbox-item" data-name="materials">
-<input type="checkbox" value="Видео">
-<label>Видео-материалы</label>
-</div>
-<div class="checkbox-item" data-name="materials">
-<input type="checkbox" value="Ничего нет">
-<label>Ничего нет, нужна помощь</label>
-</div>
-</div>
 </div>
 </div>
 
-<!-- Блок 7: Сроки и бюджет -->
-<div class="section">
-<div class="section-title">Сроки и бюджет</div>
+<!-- 06 Материалы -->
+<div class="sec" data-sec>
+<div class="sec-hdr" data-toggle><div class="sec-num">06</div><div class="sec-title">Материалы</div><div class="sec-arr">▾</div></div>
+<div class="sec-body">
 
 <div class="field">
-<label>Когда нужен результат? <span class="req">*</span></label>
-<div class="radio-group">
-<div class="radio-item" data-name="deadline" data-value="До 2 недель">Срочно</div>
-<div class="radio-item" data-name="deadline" data-value="2-4 недели">2-4 нед</div>
-<div class="radio-item" data-name="deadline" data-value="1-2 месяца">1-2 мес</div>
-<div class="radio-item" data-name="deadline" data-value="2-3 месяца">2-3 мес</div>
-<div class="radio-item" data-name="deadline" data-value="3+ месяца">3+ мес</div>
-<div class="radio-item" data-name="deadline" data-value="Гибко">Гибко</div>
+<label>Что уже есть?</label>
+<div class="chk-group" data-c="materials">
+<div class="chk-item" data-v="Логотип"><div class="chk-box"></div><div class="chk-label">Логотип и фирменный стиль</div></div>
+<div class="chk-item" data-v="Тексты"><div class="chk-box"></div><div class="chk-label">Тексты для страниц</div></div>
+<div class="chk-item" data-v="Фото"><div class="chk-box"></div><div class="chk-label">Фото и изображения</div></div>
+<div class="chk-item" data-v="Видео"><div class="chk-box"></div><div class="chk-label">Видео-материалы</div></div>
+<div class="chk-item" data-v="Ничего нет"><div class="chk-box"></div><div class="chk-label">Ничего нет</div></div>
+</div>
+</div>
+
+</div>
+</div>
+
+<!-- 07 Сроки и бюджет -->
+<div class="sec" data-sec>
+<div class="sec-hdr" data-toggle><div class="sec-num">07</div><div class="sec-title">Сроки и бюджет</div><div class="sec-arr">▾</div></div>
+<div class="sec-body">
+
+<div class="field">
+<label>Когда нужен результат?</label>
+<div class="rad-group" data-r="deadline">
+<div class="rad-item" data-v="До 2 недель"><div class="rad-circle"></div><div class="rad-label">Срочно</div></div>
+<div class="rad-item" data-v="2-4 недели"><div class="rad-circle"></div><div class="rad-label">2-4 нед</div></div>
+<div class="rad-item" data-v="1-2 месяца"><div class="rad-circle"></div><div class="rad-label">1-2 мес</div></div>
+<div class="rad-item" data-v="2-3 месяца"><div class="rad-circle"></div><div class="rad-label">2-3 мес</div></div>
+<div class="rad-item" data-v="3+ месяца"><div class="rad-circle"></div><div class="rad-label">3+ мес</div></div>
+<div class="rad-item" data-v="Гибко"><div class="rad-circle"></div><div class="rad-label">Гибко</div></div>
 </div>
 </div>
 
 <div class="field">
-<label>Ориентировочный бюджет <span class="req">*</span></label>
-<select name="budget" required data-track>
+<label>Ориентировочный бюджет</label>
+<select name="budget" data-t>
 <option value="">Выберите вариант</option>
 <option value="60 000 - 100 000 ₽">60 000 - 100 000 ₽</option>
 <option value="100 000 - 150 000 ₽">100 000 - 150 000 ₽</option>
@@ -341,44 +321,41 @@ select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='ht
 <option value="Жду оценки">Не определился, жду оценки</option>
 </select>
 </div>
-</div>
 
-<!-- Блок 8: Дополнительно -->
-<div class="section">
-<div class="section-title">Дополнительно</div>
-
-<div class="field">
-<label>Ещё пожелания <span class="opt">(необязательно)</span></label>
-<textarea name="extra" data-track placeholder="Всё что считаете важным и что мы не спросили"></textarea>
 </div>
 </div>
 
-<!-- Блок 9: Контакты -->
-<div class="section">
-<div class="section-title">Контактная информация</div>
+<!-- 08 Дополнительно -->
+<div class="sec" data-sec>
+<div class="sec-hdr" data-toggle><div class="sec-num">08</div><div class="sec-title">Дополнительно</div><div class="sec-arr">▾</div></div>
+<div class="sec-body">
 
 <div class="field">
-<label>Ваше имя <span class="req">*</span></label>
-<input type="text" name="contact_name" required data-track>
+<label>Ещё пожелания (необязательно)</label>
+<textarea name="extra" data-t placeholder="Всё что считаете важным"></textarea>
+</div>
+
+</div>
+</div>
+
+<!-- 09 Контакты -->
+<div class="sec" data-sec>
+<div class="sec-hdr" data-toggle><div class="sec-num">09</div><div class="sec-title">Контактная информация</div><div class="sec-arr">▾</div></div>
+<div class="sec-body">
+
+<div class="field">
+<label>Ваше имя</label>
+<input type="text" name="contact_name" data-t>
 </div>
 
 <div class="field">
-<label>Как с вами связаться? <span class="req">*</span></label>
-<input type="text" name="contact" required data-track placeholder="Telegram, WhatsApp, телефон или email">
+<label>Как с вами связаться?</label>
+<input type="text" name="contact" data-t placeholder="Telegram, WhatsApp, телефон или email">
+</div>
+
 </div>
 </div>
 
-</form>
-</div>
-</div>
-
-<div class="progress">
-<div class="progress-inner">
-<div class="progress-bar">
-<div class="progress-fill" id="progressFill"></div>
-</div>
-<div class="progress-text" id="progressText">Заполнено 0%</div>
-</div>
 </div>
 
 <script>
@@ -386,66 +363,76 @@ let tg=window.Telegram.WebApp;
 tg.ready();
 tg.expand();
 tg.MainButton.text="Отправить бриф";
-tg.MainButton.color="#667eea";
-tg.MainButton.textColor="#ffffff";
+tg.MainButton.color="#2B5CE6";
 tg.MainButton.show();
 tg.MainButton.disable();
 
-function updateProgress(){
-let total=document.querySelectorAll('[data-track]').length;
-let filled=0;
-document.querySelectorAll('input[data-track],select[data-track],textarea[data-track]').forEach(el=>{
-if(el.value.trim())filled++;
+// Toggle sections
+document.querySelectorAll('[data-toggle]').forEach(btn=>{
+btn.addEventListener('click',()=>{
+btn.closest('.sec').classList.toggle('open');
 });
-document.querySelectorAll('.radio-item.selected').forEach(()=>filled++);
-document.querySelectorAll('.checkbox-item.selected').forEach(()=>filled++);
-let pct=Math.round(filled/total*100);
-document.getElementById('progressFill').style.width=pct+'%';
-document.getElementById('progressText').textContent='Заполнено '+pct+'%';
-if(pct>=40){tg.MainButton.enable();}else{tg.MainButton.disable();}
+});
+
+// Radio groups
+document.querySelectorAll('[data-r]').forEach(group=>{
+group.querySelectorAll('.rad-item').forEach(item=>{
+item.addEventListener('click',()=>{
+group.querySelectorAll('.rad-item').forEach(i=>i.classList.remove('on'));
+item.classList.add('on');
+updateProg();
+});
+});
+});
+
+// Checkbox groups
+document.querySelectorAll('[data-c]').forEach(group=>{
+group.querySelectorAll('.chk-item').forEach(item=>{
+item.addEventListener('click',()=>{
+item.classList.toggle('on');
+updateProg();
+});
+});
+});
+
+// Progress
+function updateProg(){
+let total=document.querySelectorAll('[data-t]').length;
+let n=0;
+document.querySelectorAll('[data-t]').forEach(e=>{if(e.value.trim())n++});
+document.querySelectorAll('[data-r]').forEach(g=>{if(g.querySelector('.on'))n++});
+document.querySelectorAll('[data-c]').forEach(g=>{if(g.querySelector('.on'))n++});
+const p=Math.round(n/total*100);
+document.getElementById('pFill').style.width=p+'%';
+document.getElementById('pPct').textContent=p+'%';
+if(p>=30){tg.MainButton.enable()}else{tg.MainButton.disable()}
 }
 
-document.querySelectorAll('input,select,textarea').forEach(el=>{
-el.addEventListener('input',updateProgress);
-el.addEventListener('change',updateProgress);
+document.querySelectorAll('[data-t]').forEach(e=>{
+e.addEventListener('input',updateProg);
+e.addEventListener('change',updateProg);
 });
 
-document.querySelectorAll('.radio-item').forEach(item=>{
-item.addEventListener('click',()=>{
-const name=item.dataset.name;
-document.querySelectorAll(`.radio-item[data-name="${name}"]`).forEach(i=>i.classList.remove('selected'));
-item.classList.add('selected');
-updateProgress();
-});
-});
-
-document.querySelectorAll('.checkbox-item').forEach(item=>{
-item.addEventListener('click',()=>{
-item.classList.toggle('selected');
-const input=item.querySelector('input');
-if(input)input.checked=item.classList.contains('selected');
-updateProgress();
-});
-});
-
-tg.MainButton.onClick(function(){
-const form=document.getElementById('briefForm');
-const formData=new FormData(form);
+// Collect data
+tg.MainButton.onClick(()=>{
 let data={};
-for(let[key,value]of formData.entries()){
-if(value.trim())data[key]=value.trim();
-}
-document.querySelectorAll('.radio-item.selected').forEach(item=>{
-data[item.dataset.name]=item.dataset.value;
+document.querySelectorAll('[data-t]').forEach(e=>{
+if(e.value.trim())data[e.name]=e.value.trim();
 });
-['goals','style','functions','materials'].forEach(name=>{
-const selected=[...document.querySelectorAll(`.checkbox-item[data-name="${name}"].selected`)].map(i=>i.querySelector('label').textContent);
-if(selected.length)data[name]=selected.join(', ');
+document.querySelectorAll('[data-r]').forEach(g=>{
+const name=g.getAttribute('data-r');
+const sel=g.querySelector('.on');
+if(sel)data[name]=sel.getAttribute('data-v');
+});
+document.querySelectorAll('[data-c]').forEach(g=>{
+const name=g.getAttribute('data-c');
+const vals=[...g.querySelectorAll('.on')].map(i=>i.getAttribute('data-v'));
+if(vals.length)data[name]=vals.join(', ');
 });
 tg.sendData(JSON.stringify(data));
 });
 
-updateProgress();
+updateProg();
 </script>
 </body>
 </html>
