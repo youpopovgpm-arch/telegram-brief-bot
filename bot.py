@@ -7,9 +7,6 @@ from telegram.ext import Application, CommandHandler, MessageHandler, filters, C
 from reportlab.pdfgen import canvas
 from reportlab.lib.pagesizes import A4
 from reportlab.lib.units import mm
-from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
-from reportlab.platypus import Paragraph, Spacer
-from reportlab.lib.enums import TA_LEFT
 import io
 
 # Настройка логирования
@@ -19,16 +16,14 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
-# Конфигурация
-BOT_TOKEN = os.environ.get('BOT_TOKEN')
-WEB_APP_URL = os.environ.get('WEB_APP_URL')
-ADMIN_ID = 198218873  # Ваш Telegram ID
+# Конфигурация - ЭТО ВАЖНО!
+BOT_TOKEN = "8515232202:AAHdIo0WE3qY12F4_i3L3WaQYhm7nY9w8JI"  # Ваш токен
+WEB_APP_URL = "https://youpopovgpm-arch.github.io/telegram-brief-bot/"  # Ваша ссылка
+ADMIN_ID = 198218873  # Ваш ID
 
 def create_pdf(data):
     """Создает PDF файл с данными брифа"""
     buffer = io.BytesIO()
-    
-    # Создаем PDF
     c = canvas.Canvas(buffer, pagesize=A4)
     width, height = A4
     
@@ -40,7 +35,7 @@ def create_pdf(data):
     c.setFont("Helvetica", 10)
     c.drawString(30*mm, height-40*mm, f"Дата: {datetime.now().strftime('%d.%m.%Y %H:%M')}")
     
-    # Линия разделитель
+    # Линия
     c.line(30*mm, height-45*mm, width-30*mm, height-45*mm)
     
     # Данные
@@ -61,14 +56,11 @@ def create_pdf(data):
     ]
     
     for label, value in fields:
-        # Метка жирным
         c.setFont("Helvetica-Bold", 11)
         c.drawString(30*mm, y, f"{label}:")
-        
-        # Значение обычным шрифтом
         c.setFont("Helvetica", 11)
         
-        # Переносим длинный текст
+        # Обработка длинного текста
         if len(value) > 50:
             words = value.split()
             line = ""
@@ -109,17 +101,16 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     
     await update.message.reply_text(
         f"👋 Привет, {user.first_name}!\n\n"
-        "Я бот для сбора брифов.\n"
         "Нажми кнопку ниже, чтобы открыть форму и заполнить бриф.\n\n"
-        "После отправки бриф придёт мне в виде PDF файла.",
+        "После отправки PDF файл с брифом придет сюда же!",
         reply_markup=keyboard
     )
 
 async def web_app_data(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    """Получает данные из Mini App и отправляет PDF админу"""
+    """Получает данные из Mini App и отправляет PDF"""
     try:
         user = update.effective_user
-        logger.info(f"🔥 Получены данные от пользователя {user.id}")
+        logger.info(f"🔥 ПОЛУЧЕНЫ ДАННЫЕ от пользователя {user.id}")
         
         # Получаем данные из веб-приложения
         data = json.loads(update.effective_message.web_app_data.data)
@@ -131,23 +122,20 @@ async def web_app_data(update: Update, context: ContextTypes.DEFAULT_TYPE):
         # Формируем имя файла
         filename = f"brief_{user.id}_{datetime.now().strftime('%Y%m%d_%H%M%S')}.pdf"
         
-        # Отправляем PDF админу
+        # ОТПРАВЛЯЕМ В ЭТОТ ЖЕ ЧАТ (где нажали кнопку)
         await context.bot.send_document(
-            chat_id=ADMIN_ID,
+            chat_id=update.effective_chat.id,  # ← ВАЖНО! Отправляем в этот же чат
             document=pdf_buffer,
             filename=filename,
-            caption=f"📋 <b>Новый бриф от {user.full_name}</b>\n"
+            caption=f"📋 <b>Бриф от {user.full_name}</b>\n"
                     f"🆔 ID: <code>{user.id}</code>\n"
                     f"👤 Username: @{user.username if user.username else 'нет'}",
             parse_mode='HTML'
         )
-        logger.info(f"✅ PDF отправлен админу {ADMIN_ID}")
+        logger.info(f"✅ PDF отправлен в чат {update.effective_chat.id}")
         
-        # Отправляем подтверждение пользователю
-        await update.message.reply_text(
-            "✅ Спасибо! Ваш бриф успешно отправлен.\n"
-            "Мы свяжемся с вами в ближайшее время."
-        )
+        # Подтверждение пользователю
+        await update.message.reply_text("✅ Спасибо! PDF с брифом отправлен выше ☝️")
         
     except Exception as e:
         logger.error(f"❌ Ошибка при обработке данных: {e}")
@@ -162,16 +150,7 @@ async def post_init(application: Application):
 
 def main():
     """Запуск бота"""
-    # Проверяем наличие токена
-    if not BOT_TOKEN:
-        logger.error("❌ BOT_TOKEN не найден в переменных окружения!")
-        return
-    
-    if not WEB_APP_URL:
-        logger.error("❌ WEB_APP_URL не найден в переменных окружения!")
-        return
-    
-    logger.info(f"🚀 Запуск бота с ADMIN_ID = {ADMIN_ID}")
+    logger.info(f"🚀 Запуск бота...")
     logger.info(f"🌐 WEB_APP_URL = {WEB_APP_URL}")
     
     # Создаем приложение
