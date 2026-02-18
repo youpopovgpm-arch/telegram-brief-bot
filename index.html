@@ -3,134 +3,449 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Бриф</title>
+<title>Бриф на дизайн сайта</title>
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
-*{margin:0;padding:0;box-sizing:border-box;font-family:sans-serif}
-body{background:var(--tg-theme-bg-color,#fff);padding:16px;padding-bottom:80px}
-.container{max-width:500px;margin:0 auto}
-h1{font-size:24px;margin-bottom:8px;text-align:center;color:var(--tg-theme-text-color,#000)}
-.subtitle{text-align:center;color:var(--tg-theme-hint-color,#999);margin-bottom:20px;font-size:14px}
-.form-group{margin-bottom:16px}
-label{display:block;margin-bottom:6px;font-weight:500;font-size:14px;color:var(--tg-theme-text-color,#000)}
-input,select,textarea{width:100%;padding:12px;border:1px solid #ddd;border-radius:10px;font-size:16px;background:var(--tg-theme-bg-color,#fff);color:var(--tg-theme-text-color,#000)}
-input:focus,select:focus,textarea:focus{outline:none;border-color:var(--tg-theme-button-color,#2AABEE)}
-textarea{min-height:80px;resize:vertical}
-.required{color:#ff4444}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);padding:20px 16px 100px;min-height:100vh}
+.container{max-width:640px;margin:0 auto;background:#fff;border-radius:24px;box-shadow:0 20px 60px rgba(0,0,0,.3);overflow:hidden}
+.header{background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);padding:32px 24px;text-align:center;color:#fff}
+.header h1{font-size:28px;font-weight:700;margin-bottom:8px;letter-spacing:-.5px}
+.header p{font-size:15px;opacity:.9;font-weight:400}
+.content{padding:32px 24px}
+.section{margin-bottom:32px}
+.section:last-of-type{margin-bottom:0}
+.section-title{font-size:18px;font-weight:700;color:#1a1a1a;margin-bottom:16px;display:flex;align-items:center;gap:8px}
+.section-title::before{content:'';width:4px;height:20px;background:linear-gradient(135deg,#667eea,#764ba2);border-radius:2px}
+.field{margin-bottom:20px}
+.field:last-child{margin-bottom:0}
+label{display:block;font-size:14px;font-weight:600;color:#2d3748;margin-bottom:8px}
+label .req{color:#e53e3e;margin-left:2px}
+label .opt{color:#718096;font-weight:400;font-size:13px;margin-left:4px}
+input,select,textarea{width:100%;padding:14px 16px;border:2px solid #e2e8f0;border-radius:12px;font-size:15px;font-family:inherit;transition:all .2s;background:#fff;color:#2d3748}
+input:focus,select:focus,textarea:focus{outline:none;border-color:#667eea;box-shadow:0 0 0 3px rgba(102,126,234,.1)}
+textarea{min-height:100px;resize:vertical;line-height:1.6}
+.hint{font-size:13px;color:#718096;margin-top:6px;line-height:1.5}
+.checkbox-group{display:flex;flex-direction:column;gap:10px;margin-top:8px}
+.checkbox-item{display:flex;align-items:center;padding:12px 16px;border:2px solid #e2e8f0;border-radius:12px;cursor:pointer;transition:all .2s;background:#fff}
+.checkbox-item:hover{border-color:#cbd5e0}
+.checkbox-item.selected{background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);border-color:#667eea;color:#fff}
+.checkbox-item input{display:none}
+.checkbox-item label{cursor:pointer;user-select:none;font-size:14px;font-weight:500;flex:1}
+.checkbox-item.selected label{color:#fff}
+.progress{position:fixed;bottom:0;left:0;right:0;background:#fff;padding:16px;box-shadow:0 -4px 20px rgba(0,0,0,.1);z-index:100}
+.progress-inner{max-width:640px;margin:0 auto}
+.progress-bar{height:6px;background:#e2e8f0;border-radius:3px;overflow:hidden;margin-bottom:8px}
+.progress-fill{height:100%;background:linear-gradient(90deg,#667eea,#764ba2);transition:width .3s;border-radius:3px}
+.progress-text{text-align:center;font-size:13px;color:#718096;font-weight:500}
+select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%232d3748' d='M6 9L1 4h10z'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 16px center;padding-right:40px}
+.radio-group{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;margin-top:8px}
+.radio-item{padding:14px;border:2px solid #e2e8f0;border-radius:12px;text-align:center;cursor:pointer;transition:all .2s;font-size:14px;font-weight:500;background:#fff;color:#2d3748}
+.radio-item:hover{border-color:#cbd5e0}
+.radio-item.selected{background:linear-gradient(135deg,#667eea,#764ba2);border-color:#667eea;color:#fff;transform:translateY(-2px);box-shadow:0 4px 12px rgba(102,126,234,.3)}
+@media(max-width:640px){
+.container{border-radius:0;margin:-20px -16px 0}
+.header{padding:24px 20px}
+.header h1{font-size:24px}
+.content{padding:24px 20px}
+.section-title{font-size:17px}
+.radio-group{grid-template-columns:1fr}
+}
 </style>
 </head>
 <body>
 <div class="container">
-<h1>📋 Бриф на проект</h1>
-<div class="subtitle">Заполните информацию</div>
+<div class="header">
+<h1>Бриф на дизайн сайта</h1>
+<p>Заполните форму, чтобы мы оценили ваш проект</p>
+</div>
 
+<div class="content">
 <form id="briefForm">
-<div class="form-group">
-<label>Сфера деятельности <span class="required">*</span></label>
-<select id="sphere" required>
+
+<!-- Блок 1: О компании -->
+<div class="section">
+<div class="section-title">О компании и проекте</div>
+
+<div class="field">
+<label>Название компании / проекта <span class="req">*</span></label>
+<input type="text" name="company" required data-track>
+</div>
+
+<div class="field">
+<label>Чем занимается компания? <span class="req">*</span></label>
+<textarea name="business" required data-track placeholder="2-3 предложения о бизнесе"></textarea>
+<div class="hint">Кратко опишите вашу деятельность</div>
+</div>
+
+<div class="field">
+<label>Что нужно сделать? <span class="req">*</span></label>
+<select name="task_type" required data-track>
 <option value="">Выберите вариант</option>
-<option value="Маркетинг">Маркетинг</option>
-<option value="IT / Разработка">IT / Разработка</option>
-<option value="Дизайн / Креатив">Дизайн / Креатив</option>
-<option value="Образование">Образование</option>
+<option value="Дизайн нового сайта с нуля">Дизайн нового сайта с нуля</option>
+<option value="Редизайн существующего сайта">Редизайн существующего сайта</option>
+<option value="Дизайн отдельных страниц">Дизайн отдельных страниц/разделов</option>
+<option value="Landing page">Landing page</option>
+</select>
+</div>
+
+<div class="field">
+<label>Текущий сайт <span class="opt">(если есть)</span></label>
+<input type="text" name="current_site" data-track placeholder="https://...">
+<div class="hint">Если сайта нет, оставьте пустым</div>
+</div>
+</div>
+
+<!-- Блок 2: Тип и структура -->
+<div class="section">
+<div class="section-title">Тип и структура сайта</div>
+
+<div class="field">
+<label>Тип сайта <span class="req">*</span></label>
+<select name="site_type" required data-track>
+<option value="">Выберите вариант</option>
+<option value="Корпоративный сайт">Корпоративный сайт</option>
+<option value="Интернет-магазин / каталог">Интернет-магазин / каталог</option>
+<option value="Лендинг">Лендинг / посадочная страница</option>
+<option value="Портфолио">Портфолио / креативный сайт</option>
+<option value="Блог / медиа">Блог / медиа-проект</option>
+<option value="Сервис / SaaS">Сервис / SaaS платформа</option>
 <option value="Другое">Другое</option>
 </select>
 </div>
 
-<div class="form-group">
-<label>Бюджет проекта <span class="required">*</span></label>
-<select id="budget" required>
+<div class="field">
+<label>Количество страниц <span class="req">*</span></label>
+<div class="radio-group">
+<div class="radio-item" data-name="pages_count" data-value="1 страница">1 страница</div>
+<div class="radio-item" data-name="pages_count" data-value="3-5 страниц">3-5</div>
+<div class="radio-item" data-name="pages_count" data-value="5-10 страниц">5-10</div>
+<div class="radio-item" data-name="pages_count" data-value="10-20 страниц">10-20</div>
+<div class="radio-item" data-name="pages_count" data-value="20+ страниц">20+</div>
+</div>
+</div>
+
+<div class="field">
+<label>Ключевые разделы/страницы <span class="req">*</span></label>
+<textarea name="key_pages" required data-track placeholder="Главная, О компании, Услуги, Портфолио, Контакты..."></textarea>
+<div class="hint">Перечислите основные разделы через запятую</div>
+</div>
+</div>
+
+<!-- Блок 3: Целевая аудитория -->
+<div class="section">
+<div class="section-title">Цели и аудитория</div>
+
+<div class="field">
+<label>Целевая аудитория <span class="req">*</span></label>
+<textarea name="target_audience" required data-track placeholder="Кто будет пользоваться сайтом?"></textarea>
+<div class="hint">Возраст, интересы, потребности</div>
+</div>
+
+<div class="field">
+<label>Главные цели сайта <span class="req">*</span></label>
+<div class="checkbox-group">
+<div class="checkbox-item" data-name="goals">
+<input type="checkbox" value="Продажи">
+<label>Продажи товаров/услуг</label>
+</div>
+<div class="checkbox-item" data-name="goals">
+<input type="checkbox" value="Лиды">
+<label>Генерация лидов (заявок)</label>
+</div>
+<div class="checkbox-item" data-name="goals">
+<input type="checkbox" value="Презентация">
+<label>Презентация компании</label>
+</div>
+<div class="checkbox-item" data-name="goals">
+<input type="checkbox" value="Портфолио">
+<label>Показать портфолио работ</label>
+</div>
+<div class="checkbox-item" data-name="goals">
+<input type="checkbox" value="Контент">
+<label>Информирование / контент</label>
+</div>
+<div class="checkbox-item" data-name="goals">
+<input type="checkbox" value="Инвестиции">
+<label>Привлечение инвестиций</label>
+</div>
+</div>
+</div>
+</div>
+
+<!-- Блок 4: Дизайн -->
+<div class="section">
+<div class="section-title">Дизайн и стиль</div>
+
+<div class="field">
+<label>Примеры сайтов, которые нравятся <span class="opt">(желательно)</span></label>
+<textarea name="examples" data-track placeholder="Вставьте 2-3 ссылки и напишите что именно нравится"></textarea>
+<div class="hint">Это очень помогает понять ваши предпочтения</div>
+</div>
+
+<div class="field">
+<label>Стиль дизайна <span class="req">*</span></label>
+<div class="checkbox-group">
+<div class="checkbox-item" data-name="style">
+<input type="checkbox" value="Минималистичный">
+<label>Минималистичный</label>
+</div>
+<div class="checkbox-item" data-name="style">
+<input type="checkbox" value="Современный">
+<label>Современный / технологичный</label>
+</div>
+<div class="checkbox-item" data-name="style">
+<input type="checkbox" value="Корпоративный">
+<label>Корпоративный / строгий</label>
+</div>
+<div class="checkbox-item" data-name="style">
+<input type="checkbox" value="Яркий">
+<label>Яркий / креативный</label>
+</div>
+<div class="checkbox-item" data-name="style">
+<input type="checkbox" value="Премиум">
+<label>Премиум / люкс</label>
+</div>
+<div class="checkbox-item" data-name="style">
+<input type="checkbox" value="Молодёжный">
+<label>Молодёжный / динамичный</label>
+</div>
+</div>
+</div>
+
+<div class="field">
+<label>Цветовые предпочтения <span class="opt">(необязательно)</span></label>
+<input type="text" name="colors" data-track placeholder="Например: синий и белый, тёмная тема">
+</div>
+</div>
+
+<!-- Блок 5: Функциональность -->
+<div class="section">
+<div class="section-title">Функциональность</div>
+
+<div class="field">
+<label>Необходимые функции <span class="req">*</span></label>
+<div class="checkbox-group">
+<div class="checkbox-item" data-name="functions">
+<input type="checkbox" value="Форма заявки">
+<label>Форма заявки / обратной связи</label>
+</div>
+<div class="checkbox-item" data-name="functions">
+<input type="checkbox" value="Онлайн-чат">
+<label>Онлайн-чат</label>
+</div>
+<div class="checkbox-item" data-name="functions">
+<input type="checkbox" value="CRM">
+<label>Интеграция с CRM</label>
+</div>
+<div class="checkbox-item" data-name="functions">
+<input type="checkbox" value="Калькулятор">
+<label>Калькулятор / конфигуратор</label>
+</div>
+<div class="checkbox-item" data-name="functions">
+<input type="checkbox" value="Личный кабинет">
+<label>Личный кабинет пользователя</label>
+</div>
+<div class="checkbox-item" data-name="functions">
+<input type="checkbox" value="Блог">
+<label>Блог / новости</label>
+</div>
+<div class="checkbox-item" data-name="functions">
+<input type="checkbox" value="Корзина">
+<label>Корзина и оплата</label>
+</div>
+<div class="checkbox-item" data-name="functions">
+<input type="checkbox" value="Поиск">
+<label>Фильтры и поиск</label>
+</div>
+<div class="checkbox-item" data-name="functions">
+<input type="checkbox" value="Мультиязычность">
+<label>Мультиязычность</label>
+</div>
+<div class="checkbox-item" data-name="functions">
+<input type="checkbox" value="Анимации">
+<label>Анимации / интерактив</label>
+</div>
+</div>
+</div>
+
+<div class="field">
+<label>Нужна ли разработка? <span class="req">*</span></label>
+<select name="development" required data-track>
 <option value="">Выберите вариант</option>
-<option value="До 50 000 ₽">До 50 000 ₽</option>
-<option value="50 000 - 150 000 ₽">50 000 - 150 000 ₽</option>
-<option value="150 000 - 500 000 ₽">150 000 - 500 000 ₽</option>
+<option value="Полная разработка на CMS">Да, полная разработка на CMS</option>
+<option value="Только вёрстка">Да, но только вёрстка (HTML/CSS)</option>
+<option value="Только дизайн">Нет, только дизайн-макеты</option>
+<option value="Не уверен">Не уверен, посоветуйте</option>
+</select>
+</div>
+</div>
+
+<!-- Блок 6: Материалы -->
+<div class="section">
+<div class="section-title">Материалы</div>
+
+<div class="field">
+<label>Что уже есть? <span class="req">*</span></label>
+<div class="checkbox-group">
+<div class="checkbox-item" data-name="materials">
+<input type="checkbox" value="Логотип">
+<label>Логотип и фирменный стиль</label>
+</div>
+<div class="checkbox-item" data-name="materials">
+<input type="checkbox" value="Тексты">
+<label>Тексты для всех страниц</label>
+</div>
+<div class="checkbox-item" data-name="materials">
+<input type="checkbox" value="Фото">
+<label>Фото и изображения</label>
+</div>
+<div class="checkbox-item" data-name="materials">
+<input type="checkbox" value="Видео">
+<label>Видео-материалы</label>
+</div>
+<div class="checkbox-item" data-name="materials">
+<input type="checkbox" value="Ничего нет">
+<label>Ничего нет, нужна помощь</label>
+</div>
+</div>
+</div>
+</div>
+
+<!-- Блок 7: Сроки и бюджет -->
+<div class="section">
+<div class="section-title">Сроки и бюджет</div>
+
+<div class="field">
+<label>Когда нужен результат? <span class="req">*</span></label>
+<div class="radio-group">
+<div class="radio-item" data-name="deadline" data-value="До 2 недель">Срочно</div>
+<div class="radio-item" data-name="deadline" data-value="2-4 недели">2-4 нед</div>
+<div class="radio-item" data-name="deadline" data-value="1-2 месяца">1-2 мес</div>
+<div class="radio-item" data-name="deadline" data-value="2-3 месяца">2-3 мес</div>
+<div class="radio-item" data-name="deadline" data-value="3+ месяца">3+ мес</div>
+<div class="radio-item" data-name="deadline" data-value="Гибко">Гибко</div>
+</div>
+</div>
+
+<div class="field">
+<label>Ориентировочный бюджет <span class="req">*</span></label>
+<select name="budget" required data-track>
+<option value="">Выберите вариант</option>
+<option value="60 000 - 100 000 ₽">60 000 - 100 000 ₽</option>
+<option value="100 000 - 150 000 ₽">100 000 - 150 000 ₽</option>
+<option value="150 000 - 250 000 ₽">150 000 - 250 000 ₽</option>
+<option value="250 000 - 500 000 ₽">250 000 - 500 000 ₽</option>
 <option value="Более 500 000 ₽">Более 500 000 ₽</option>
-<option value="Не определились">Не определились</option>
+<option value="Жду оценки">Не определился, жду оценки</option>
 </select>
 </div>
-
-<div class="form-group">
-<label>Сроки <span class="required">*</span></label>
-<select id="timeline" required>
-<option value="">Выберите вариант</option>
-<option value="1-2 недели">1-2 недели</option>
-<option value="1 месяц">1 месяц</option>
-<option value="2-3 месяца">2-3 месяца</option>
-<option value="Более 3 месяцев">Более 3 месяцев</option>
-<option value="Гибкие сроки">Гибкие сроки</option>
-</select>
 </div>
 
-<div class="form-group">
-<label>Подробности <span class="required">*</span></label>
-<textarea id="details" required placeholder="Опишите задачу, цели, пожелания..."></textarea>
+<!-- Блок 8: Дополнительно -->
+<div class="section">
+<div class="section-title">Дополнительно</div>
+
+<div class="field">
+<label>Ещё пожелания <span class="opt">(необязательно)</span></label>
+<textarea name="extra" data-track placeholder="Всё что считаете важным и что мы не спросили"></textarea>
+</div>
 </div>
 
-<div class="form-group">
-<label>Ваше имя <span class="required">*</span></label>
-<input type="text" id="name" required placeholder="Как к вам обращаться?">
+<!-- Блок 9: Контакты -->
+<div class="section">
+<div class="section-title">Контактная информация</div>
+
+<div class="field">
+<label>Ваше имя <span class="req">*</span></label>
+<input type="text" name="contact_name" required data-track>
 </div>
 
-<div class="form-group">
-<label>Контакт для связи <span class="required">*</span></label>
-<input type="text" id="contact" required placeholder="@username или телефон">
+<div class="field">
+<label>Как с вами связаться? <span class="req">*</span></label>
+<input type="text" name="contact" required data-track placeholder="Telegram, WhatsApp, телефон или email">
 </div>
+</div>
+
 </form>
+</div>
+</div>
+
+<div class="progress">
+<div class="progress-inner">
+<div class="progress-bar">
+<div class="progress-fill" id="progressFill"></div>
+</div>
+<div class="progress-text" id="progressText">Заполнено 0%</div>
+</div>
 </div>
 
 <script>
-let tg = window.Telegram.WebApp;
-
-// Инициализация
+let tg=window.Telegram.WebApp;
 tg.ready();
 tg.expand();
-
-// Настройка главной кнопки
-tg.MainButton.text = "Отправить бриф";
-tg.MainButton.color = "#2AABEE";
+tg.MainButton.text="Отправить бриф";
+tg.MainButton.color="#667eea";
+tg.MainButton.textColor="#ffffff";
 tg.MainButton.show();
+tg.MainButton.disable();
 
-// Проверка заполненности формы
-function checkForm() {
-  const sphere = document.getElementById('sphere').value;
-  const budget = document.getElementById('budget').value;
-  const timeline = document.getElementById('timeline').value;
-  const details = document.getElementById('details').value.trim();
-  const name = document.getElementById('name').value.trim();
-  const contact = document.getElementById('contact').value.trim();
-  
-  const filled = sphere && budget && timeline && details && name && contact;
-  
-  if (filled) {
-    tg.MainButton.enable();
-  } else {
-    tg.MainButton.disable();
-  }
+function updateProgress(){
+let total=document.querySelectorAll('[data-track]').length;
+let filled=0;
+document.querySelectorAll('input[data-track],select[data-track],textarea[data-track]').forEach(el=>{
+if(el.value.trim())filled++;
+});
+document.querySelectorAll('.radio-item.selected').forEach(()=>filled++);
+document.querySelectorAll('.checkbox-item.selected').forEach(()=>filled++);
+let pct=Math.round(filled/total*100);
+document.getElementById('progressFill').style.width=pct+'%';
+document.getElementById('progressText').textContent='Заполнено '+pct+'%';
+if(pct>=40){tg.MainButton.enable();}else{tg.MainButton.disable();}
 }
 
-// Слушаем изменения в форме
-document.querySelectorAll('input, select, textarea').forEach(el => {
-  el.addEventListener('input', checkForm);
-  el.addEventListener('change', checkForm);
+document.querySelectorAll('input,select,textarea').forEach(el=>{
+el.addEventListener('input',updateProgress);
+el.addEventListener('change',updateProgress);
 });
 
-// Обработка нажатия главной кнопки
-tg.MainButton.onClick(function() {
-  const data = {
-    sphere: document.getElementById('sphere').value,
-    budget: document.getElementById('budget').value,
-    timeline: document.getElementById('timeline').value,
-    details: document.getElementById('details').value.trim(),
-    name: document.getElementById('name').value.trim(),
-    contact: document.getElementById('contact').value.trim()
-  };
-  
-  // Отправляем данные
-  tg.sendData(JSON.stringify(data));
+document.querySelectorAll('.radio-item').forEach(item=>{
+item.addEventListener('click',()=>{
+const name=item.dataset.name;
+document.querySelectorAll(`.radio-item[data-name="${name}"]`).forEach(i=>i.classList.remove('selected'));
+item.classList.add('selected');
+updateProgress();
+});
 });
 
-// Начальная проверка
-checkForm();
+document.querySelectorAll('.checkbox-item').forEach(item=>{
+item.addEventListener('click',()=>{
+item.classList.toggle('selected');
+const input=item.querySelector('input');
+if(input)input.checked=item.classList.contains('selected');
+updateProgress();
+});
+});
+
+tg.MainButton.onClick(function(){
+const form=document.getElementById('briefForm');
+const formData=new FormData(form);
+let data={};
+for(let[key,value]of formData.entries()){
+if(value.trim())data[key]=value.trim();
+}
+document.querySelectorAll('.radio-item.selected').forEach(item=>{
+data[item.dataset.name]=item.dataset.value;
+});
+['goals','style','functions','materials'].forEach(name=>{
+const selected=[...document.querySelectorAll(`.checkbox-item[data-name="${name}"].selected`)].map(i=>i.querySelector('label').textContent);
+if(selected.length)data[name]=selected.join(', ');
+});
+tg.sendData(JSON.stringify(data));
+});
+
+updateProgress();
 </script>
 </body>
 </html>
