@@ -7,432 +7,494 @@
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=Geologica:wght@400;600;700&family=Inter:wght@400;500&display=swap" rel="stylesheet">
 <style>
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-:root {
-  --navy: #0F1F3D; --navy2: #1A3260; --blue: #2B5CE6;
-  --blue-lt: #EEF3FF; --text: #1A1A2E; --muted: #6B7280;
-  --border: #D1D9F0; --bg: #F7F9FF; --white: #fff;
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+--navy:#0F1F3D;--navy2:#1A3260;--blue:#2B5CE6;
+--blue-lt:#EEF3FF;--text:#1A1A2E;--muted:#6B7280;
+--border:#D1D9F0;--bg:#F7F9FF;--white:#fff;
 }
-body { font-family:'Inter',sans-serif; background:var(--bg); color:var(--text); line-height:1.6; -webkit-text-size-adjust:100%; padding-bottom:80px; }
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);line-height:1.6;overflow:hidden;height:100vh}
 
 /* HEADER */
-.hdr { background:linear-gradient(135deg,var(--navy),var(--navy2)); padding:36px 20px 30px; text-align:center; }
-.hdr-badge { display:inline-block; background:rgba(43,92,230,.35); border:1px solid rgba(255,255,255,.2); color:#a5c0ff; font-size:11px; letter-spacing:2px; text-transform:uppercase; padding:4px 14px; border-radius:30px; margin-bottom:14px; }
-.hdr h1 { font-family:'Geologica',sans-serif; font-size:clamp(20px,5vw,28px); font-weight:700; color:#fff; margin-bottom:10px; }
-.hdr p { color:#a5c0ff; font-size:14px; max-width:460px; margin:0 auto 18px; }
-.hdr-pills { display:flex; flex-wrap:wrap; gap:6px; justify-content:center; }
-.hdr-pill { background:rgba(255,255,255,.1); border:1px solid rgba(255,255,255,.15); color:#c8d8ff; font-size:12px; padding:4px 12px; border-radius:20px; }
+.hdr{background:linear-gradient(135deg,var(--navy),var(--navy2));padding:24px 20px 20px;text-align:center}
+.hdr-badge{display:inline-block;background:rgba(43,92,230,.35);border:1px solid rgba(255,255,255,.2);color:#a5c0ff;font-size:11px;letter-spacing:2px;text-transform:uppercase;padding:4px 14px;border-radius:30px;margin-bottom:10px}
+.hdr h1{font-family:'Geologica',sans-serif;font-size:22px;font-weight:700;color:#fff;margin-bottom:6px}
+.hdr p{color:#a5c0ff;font-size:13px}
 
 /* PROGRESS */
-.prog { position:sticky; top:0; z-index:100; background:var(--white); border-bottom:1px solid var(--border); padding:9px 16px; display:flex; align-items:center; gap:10px; box-shadow:0 2px 8px rgba(0,0,0,.06); }
-.prog-lbl { font-size:12px; color:var(--muted); white-space:nowrap; }
-.prog-track { flex:1; height:6px; background:var(--border); border-radius:10px; overflow:hidden; }
-.prog-fill { height:100%; background:linear-gradient(90deg,var(--blue),#5b8aff); border-radius:10px; transition:width .4s; width:0; }
-.prog-pct { font-size:12px; font-weight:600; color:var(--blue); min-width:28px; }
+.prog{background:var(--white);border-bottom:1px solid var(--border);padding:12px 16px;display:flex;align-items:center;gap:10px;box-shadow:0 2px 8px rgba(0,0,0,.06)}
+.prog-step{font-size:12px;color:var(--muted);white-space:nowrap;font-weight:600}
+.prog-track{flex:1;height:6px;background:var(--border);border-radius:10px;overflow:hidden}
+.prog-fill{height:100%;background:linear-gradient(90deg,var(--blue),#5b8aff);border-radius:10px;transition:width .3s;width:0}
+.prog-pct{font-size:12px;font-weight:600;color:var(--blue);min-width:32px}
 
-/* WRAP */
-.wrap { max-width:720px; margin:0 auto; padding:22px 14px 60px; }
+/* QUIZ */
+.quiz{height:calc(100vh - 200px);display:flex;flex-direction:column;overflow:hidden}
+.slide{display:none;flex-direction:column;height:100%;padding:24px 20px;animation:fadeIn .3s}
+.slide.active{display:flex}
+@keyframes fadeIn{from{opacity:0;transform:translateX(20px)}to{opacity:1;transform:translateX(0)}}
 
-/* SECTION */
-.sec { background:var(--white); border-radius:12px; border:1px solid var(--border); box-shadow:0 2px 12px rgba(43,92,230,.07); margin-bottom:16px; overflow:hidden; }
-.sec-hdr { display:flex; align-items:center; gap:12px; padding:14px 18px; background:var(--navy); cursor:pointer; -webkit-tap-highlight-color:transparent; user-select:none; }
-.sec-hdr:active { background:var(--navy2); }
-.sec-num { width:30px; height:30px; border-radius:50%; background:rgba(43,92,230,.5); border:1.5px solid rgba(255,255,255,.25); display:flex; align-items:center; justify-content:center; font-family:'Geologica',sans-serif; font-size:12px; font-weight:700; color:#fff; flex-shrink:0; }
-.sec-title { font-family:'Geologica',sans-serif; font-size:14px; font-weight:600; color:#fff; flex:1; }
-.sec-arr { color:rgba(255,255,255,.5); font-size:16px; transition:transform .25s; }
-.sec.open .sec-arr { transform:rotate(180deg); }
-.sec-body { display:none; padding:4px 18px 18px; }
-.sec.open .sec-body { display:block; }
+.q-num{font-size:13px;color:var(--muted);margin-bottom:8px;font-weight:500}
+.q-title{font-family:'Geologica',sans-serif;font-size:20px;font-weight:700;color:var(--navy);margin-bottom:4px;line-height:1.3}
+.q-subtitle{font-size:14px;color:var(--muted);margin-bottom:20px}
 
-/* FIELDS */
-.field { margin-top:16px; }
-.field label { display:block; font-size:13px; font-weight:500; color:var(--navy); margin-bottom:4px; }
-.field .hint { font-size:12px; color:var(--muted); margin-bottom:6px; font-style:italic; }
-input[type=text], input[type=email], input[type=tel], textarea, select {
-  width:100%; padding:11px 14px; border:1.5px solid var(--border); border-radius:10px;
-  font-family:'Inter',sans-serif; font-size:16px; color:var(--text); background:var(--bg);
-  outline:none; transition:border .2s,box-shadow .2s; resize:vertical;
-  -webkit-appearance:none; appearance:none;
+.q-body{flex:1;overflow-y:auto;padding-bottom:20px}
+
+/* INPUT */
+input[type=text],textarea,select{
+width:100%;padding:14px 16px;border:2px solid var(--border);border-radius:12px;
+font-family:'Inter',sans-serif;font-size:16px;color:var(--text);background:var(--white);
+outline:none;transition:all .2s;resize:vertical;-webkit-appearance:none;appearance:none;
 }
-input:focus, textarea:focus, select:focus { border-color:var(--blue); box-shadow:0 0 0 3px rgba(43,92,230,.1); background:#fff; }
-textarea { min-height:88px; }
-select { background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12'%3E%3Cpath fill='%231A1A2E' d='M6 9L1 4h10z'/%3E%3C/svg%3E"); background-repeat:no-repeat; background-position:right 14px center; padding-right:40px; }
+input:focus,textarea:focus,select:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(43,92,230,.1)}
+textarea{min-height:120px}
+select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12'%3E%3Cpath fill='%231A1A2E' d='M6 9L1 4h10z'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 16px center;padding-right:40px}
+.hint{font-size:13px;color:var(--muted);margin-bottom:12px;font-style:italic}
 
-/* CHECKBOXES */
-.chk-group { display:flex; flex-wrap:wrap; gap:8px; margin-top:8px; }
-.chk-item { display:flex; align-items:center; gap:8px; padding:9px 14px; border:1.5px solid var(--border); border-radius:30px; cursor:pointer; background:var(--bg); user-select:none; -webkit-tap-highlight-color:transparent; transition:all .15s; min-height:44px; }
-.chk-item:active,.chk-item:hover { border-color:var(--blue); background:var(--blue-lt); }
-.chk-item.on { border-color:var(--blue); background:var(--blue-lt); }
-.chk-box { width:18px; height:18px; border:2px solid var(--border); border-radius:4px; background:#fff; display:flex; align-items:center; justify-content:center; flex-shrink:0; transition:all .15s; pointer-events:none; }
-.chk-item.on .chk-box { background:var(--blue); border-color:var(--blue); }
-.chk-box::after { content:''; display:none; width:5px; height:9px; border:2px solid #fff; border-top:none; border-left:none; transform:rotate(45deg) translate(-1px,-1px); }
-.chk-item.on .chk-box::after { display:block; }
-.chk-label { font-size:13px; color:var(--text); pointer-events:none; }
-.chk-item.on .chk-label { color:var(--navy); font-weight:500; }
+/* OPTIONS */
+.opts{display:flex;flex-direction:column;gap:10px}
+.opt{display:flex;align-items:center;gap:12px;padding:16px 18px;border:2px solid var(--border);border-radius:14px;cursor:pointer;background:var(--white);user-select:none;-webkit-tap-highlight-color:transparent;transition:all .2s;min-height:60px}
+.opt:active{transform:scale(.98)}
+.opt.sel{border-color:var(--blue);background:var(--blue-lt)}
+.opt-icon{font-size:28px;flex-shrink:0}
+.opt-txt{flex:1}
+.opt-title{font-size:15px;font-weight:600;color:var(--navy)}
+.opt.sel .opt-title{color:var(--blue)}
+.opt-desc{font-size:12px;color:var(--muted);margin-top:2px}
 
 /* RADIO */
-.rad-group { display:flex; flex-wrap:wrap; gap:8px; margin-top:8px; }
-.rad-item { display:flex; align-items:center; gap:8px; padding:9px 14px; border:1.5px solid var(--border); border-radius:30px; cursor:pointer; background:var(--bg); user-select:none; -webkit-tap-highlight-color:transparent; transition:all .15s; min-height:44px; }
-.rad-item:active,.rad-item:hover { border-color:var(--blue); background:var(--blue-lt); }
-.rad-item.on { border-color:var(--blue); background:var(--blue-lt); }
-.rad-circle { width:16px; height:16px; border:2px solid var(--border); border-radius:50%; background:#fff; display:flex; align-items:center; justify-content:center; flex-shrink:0; transition:all .15s; pointer-events:none; }
-.rad-item.on .rad-circle { border-color:var(--blue); }
-.rad-circle::after { content:''; display:none; width:7px; height:7px; border-radius:50%; background:var(--blue); }
-.rad-item.on .rad-circle::after { display:block; }
-.rad-label { font-size:13px; color:var(--text); pointer-events:none; }
-.rad-item.on .rad-label { color:var(--navy); font-weight:500; }
+.opt-radio{width:20px;height:20px;border:2px solid var(--border);border-radius:50%;background:var(--white);flex-shrink:0;transition:all .2s;display:flex;align-items:center;justify-content:center}
+.opt.sel .opt-radio{border-color:var(--blue)}
+.opt-radio::after{content:'';width:10px;height:10px;border-radius:50%;background:var(--blue);display:none}
+.opt.sel .opt-radio::after{display:block}
 
-.g2 { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
-@media(max-width:480px){ .g2 { grid-template-columns:1fr; } }
+/* CHECKBOX */
+.opt-check{width:20px;height:20px;border:2px solid var(--border);border-radius:6px;background:var(--white);flex-shrink:0;transition:all .2s;display:flex;align-items:center;justify-content:center}
+.opt.sel .opt-check{background:var(--blue);border-color:var(--blue)}
+.opt-check::after{content:'';width:6px;height:10px;border:2px solid #fff;border-top:none;border-left:none;transform:rotate(45deg) translate(-1px,-1px);display:none}
+.opt.sel .opt-check::after{display:block}
+
+/* BUTTONS */
+.btns{display:flex;gap:10px;padding:0 20px 20px;background:var(--bg)}
+.btn{flex:1;padding:16px;border:none;border-radius:14px;font-family:'Geologica',sans-serif;font-size:15px;font-weight:700;cursor:pointer;transition:all .2s;-webkit-tap-highlight-color:transparent;min-height:56px}
+.btn-back{background:var(--white);color:var(--navy);border:2px solid var(--border)}
+.btn-back:active{background:#f5f5f5}
+.btn-back:disabled{opacity:.4;cursor:not-allowed}
+.btn-next{background:var(--blue);color:#fff;box-shadow:0 4px 16px rgba(43,92,230,.3)}
+.btn-next:active{opacity:.9;transform:translateY(1px)}
+.btn-next:disabled{opacity:.5;cursor:not-allowed;transform:none}
+
+/* FINAL */
+.final{text-align:center;padding-top:40px}
+.final-icon{font-size:64px;margin-bottom:16px}
+.final h2{font-family:'Geologica',sans-serif;font-size:24px;font-weight:700;color:var(--navy);margin-bottom:10px}
+.final p{font-size:15px;color:var(--muted);line-height:1.6;margin-bottom:24px}
+.final-summary{background:var(--white);border:2px solid var(--border);border-radius:14px;padding:16px;text-align:left;margin-bottom:20px}
+.final-row{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border);font-size:14px}
+.final-row:last-child{border:none}
+.final-lbl{color:var(--muted)}
+.final-val{font-weight:600;color:var(--navy)}
 </style>
 </head>
 <body>
 
 <div class="hdr">
-  <div class="hdr-badge">Анкета для клиента</div>
-  <h1>Бриф на дизайн сайта</h1>
-  <p>Расскажите о вашем проекте — мы подготовим предложение специально для вас</p>
-  <div class="hdr-pills">
-    <span class="hdr-pill">⏱ 7–10 минут</span>
-    <span class="hdr-pill">📋 9 разделов</span>
-    <span class="hdr-pill">📬 Отправка в Telegram</span>
-  </div>
+<div class="hdr-badge">Анкета для клиента</div>
+<h1>Бриф на дизайн сайта</h1>
+<p>Ответьте на 20 вопросов</p>
 </div>
 
 <div class="prog">
-  <span class="prog-lbl">Заполнено</span>
-  <div class="prog-track"><div class="prog-fill" id="pFill"></div></div>
-  <span class="prog-pct" id="pPct">0%</span>
+<span class="prog-step" id="step">1/20</span>
+<div class="prog-track"><div class="prog-fill" id="pFill"></div></div>
+<span class="prog-pct" id="pPct">5%</span>
 </div>
 
-<div class="wrap">
+<div class="quiz" id="quiz">
 
-<!-- 01 О компании -->
-<div class="sec open" data-sec>
-<div class="sec-hdr" data-toggle><div class="sec-num">01</div><div class="sec-title">О компании и проекте</div><div class="sec-arr">▾</div></div>
-<div class="sec-body">
-
-<div class="field">
-<label>Название компании / проекта</label>
-<input type="text" name="company" data-t>
+<!-- Q1 -->
+<div class="slide active">
+<div class="q-num">Вопрос 1 из 20</div>
+<div class="q-title">🏢 Название компании или проекта</div>
+<div class="q-subtitle">Как называется ваш бизнес?</div>
+<div class="q-body">
+<input type="text" id="q1" placeholder="Введите название">
+</div>
 </div>
 
-<div class="field">
-<label>Чем занимается компания?</label>
+<!-- Q2 -->
+<div class="slide">
+<div class="q-num">Вопрос 2 из 20</div>
+<div class="q-title">💼 Чем занимается компания?</div>
+<div class="q-subtitle">Опишите кратко вашу деятельность</div>
+<div class="q-body">
 <div class="hint">2-3 предложения о бизнесе</div>
-<textarea name="business" data-t></textarea>
-</div>
-
-<div class="field">
-<label>Что нужно сделать?</label>
-<select name="task_type" data-t>
-<option value="">Выберите вариант</option>
-<option value="Дизайн нового сайта с нуля">Дизайн нового сайта с нуля</option>
-<option value="Редизайн существующего">Редизайн существующего сайта</option>
-<option value="Дизайн отдельных страниц">Дизайн отдельных страниц/разделов</option>
-<option value="Landing page">Landing page</option>
-</select>
-</div>
-
-<div class="field">
-<label>Текущий сайт (если есть)</label>
-<input type="text" name="current_site" data-t placeholder="https://...">
-</div>
-
+<textarea id="q2" placeholder="Например: Производим и продаём мебель для офисов..."></textarea>
 </div>
 </div>
 
-<!-- 02 Тип и структура -->
-<div class="sec" data-sec>
-<div class="sec-hdr" data-toggle><div class="sec-num">02</div><div class="sec-title">Тип и структура сайта</div><div class="sec-arr">▾</div></div>
-<div class="sec-body">
-
-<div class="field">
-<label>Тип сайта</label>
-<select name="site_type" data-t>
-<option value="">Выберите вариант</option>
-<option value="Корпоративный сайт">Корпоративный сайт</option>
-<option value="Интернет-магазин">Интернет-магазин / каталог</option>
-<option value="Лендинг">Лендинг / посадочная страница</option>
-<option value="Портфолио">Портфолио / креативный сайт</option>
-<option value="Блог">Блог / медиа-проект</option>
-<option value="Сервис">Сервис / SaaS платформа</option>
-<option value="Другое">Другое</option>
-</select>
+<!-- Q3 -->
+<div class="slide">
+<div class="q-num">Вопрос 3 из 20</div>
+<div class="q-title">🎯 Что нужно сделать?</div>
+<div class="q-subtitle">Выберите тип задачи</div>
+<div class="q-body">
+<div class="opts" data-type="radio" data-id="q3">
+<div class="opt"><div class="opt-icon">✨</div><div class="opt-txt"><div class="opt-title">Дизайн нового сайта с нуля</div></div><div class="opt-radio"></div></div>
+<div class="opt"><div class="opt-icon">🔄</div><div class="opt-txt"><div class="opt-title">Редизайн существующего сайта</div></div><div class="opt-radio"></div></div>
+<div class="opt"><div class="opt-icon">📄</div><div class="opt-txt"><div class="opt-title">Дизайн отдельных страниц</div></div><div class="opt-radio"></div></div>
+<div class="opt"><div class="opt-icon">🚀</div><div class="opt-txt"><div class="opt-title">Landing page</div></div><div class="opt-radio"></div></div>
 </div>
-
-<div class="field">
-<label>Количество страниц</label>
-<div class="rad-group" data-r="pages">
-<div class="rad-item" data-v="1 страница"><div class="rad-circle"></div><div class="rad-label">1 страница</div></div>
-<div class="rad-item" data-v="3-5"><div class="rad-circle"></div><div class="rad-label">3-5</div></div>
-<div class="rad-item" data-v="5-10"><div class="rad-circle"></div><div class="rad-label">5-10</div></div>
-<div class="rad-item" data-v="10-20"><div class="rad-circle"></div><div class="rad-label">10-20</div></div>
-<div class="rad-item" data-v="20+"><div class="rad-circle"></div><div class="rad-label">20+</div></div>
 </div>
 </div>
 
-<div class="field">
-<label>Ключевые разделы/страницы</label>
+<!-- Q4 -->
+<div class="slide">
+<div class="q-num">Вопрос 4 из 20</div>
+<div class="q-title">🌐 Текущий сайт</div>
+<div class="q-subtitle">Есть ли у вас сайт сейчас?</div>
+<div class="q-body">
+<div class="hint">Если есть — укажите ссылку, если нет — пропустите</div>
+<input type="text" id="q4" placeholder="https://...">
+</div>
+</div>
+
+<!-- Q5 -->
+<div class="slide">
+<div class="q-num">Вопрос 5 из 20</div>
+<div class="q-title">📱 Тип сайта</div>
+<div class="q-subtitle">Какой сайт вам нужен?</div>
+<div class="q-body">
+<div class="opts" data-type="radio" data-id="q5">
+<div class="opt"><div class="opt-icon">🏛</div><div class="opt-txt"><div class="opt-title">Корпоративный сайт</div></div><div class="opt-radio"></div></div>
+<div class="opt"><div class="opt-icon">🛍</div><div class="opt-txt"><div class="opt-title">Интернет-магазин / каталог</div></div><div class="opt-radio"></div></div>
+<div class="opt"><div class="opt-icon">📄</div><div class="opt-txt"><div class="opt-title">Лендинг / посадочная страница</div></div><div class="opt-radio"></div></div>
+<div class="opt"><div class="opt-icon">🎨</div><div class="opt-txt"><div class="opt-title">Портфолио / креативный сайт</div></div><div class="opt-radio"></div></div>
+<div class="opt"><div class="opt-icon">📰</div><div class="opt-txt"><div class="opt-title">Блог / медиа-проект</div></div><div class="opt-radio"></div></div>
+<div class="opt"><div class="opt-icon">⚙️</div><div class="opt-txt"><div class="opt-title">Сервис / SaaS платформа</div></div><div class="opt-radio"></div></div>
+</div>
+</div>
+</div>
+
+<!-- Q6 -->
+<div class="slide">
+<div class="q-num">Вопрос 6 из 20</div>
+<div class="q-title">📊 Количество страниц</div>
+<div class="q-subtitle">Сколько страниц планируется?</div>
+<div class="q-body">
+<div class="opts" data-type="radio" data-id="q6">
+<div class="opt"><div class="opt-icon">1️⃣</div><div class="opt-txt"><div class="opt-title">1 страница (лендинг)</div></div><div class="opt-radio"></div></div>
+<div class="opt"><div class="opt-icon">3️⃣</div><div class="opt-txt"><div class="opt-title">3-5 страниц</div></div><div class="opt-radio"></div></div>
+<div class="opt"><div class="opt-icon">5️⃣</div><div class="opt-txt"><div class="opt-title">5-10 страниц</div></div><div class="opt-radio"></div></div>
+<div class="opt"><div class="opt-icon">🔟</div><div class="opt-txt"><div class="opt-title">10-20 страниц</div></div><div class="opt-radio"></div></div>
+<div class="opt"><div class="opt-icon">📚</div><div class="opt-txt"><div class="opt-title">Больше 20 страниц</div></div><div class="opt-radio"></div></div>
+</div>
+</div>
+</div>
+
+<!-- Q7 -->
+<div class="slide">
+<div class="q-num">Вопрос 7 из 20</div>
+<div class="q-title">📑 Ключевые разделы</div>
+<div class="q-subtitle">Какие страницы должны быть?</div>
+<div class="q-body">
 <div class="hint">Перечислите основные разделы</div>
-<textarea name="key_pages" data-t placeholder="Главная, О компании, Услуги, Портфолио, Контакты..."></textarea>
-</div>
-
+<textarea id="q7" placeholder="Главная, О компании, Услуги, Портфолио, Контакты..."></textarea>
 </div>
 </div>
 
-<!-- 03 Цели и аудитория -->
-<div class="sec" data-sec>
-<div class="sec-hdr" data-toggle><div class="sec-num">03</div><div class="sec-title">Цели и аудитория</div><div class="sec-arr">▾</div></div>
-<div class="sec-body">
-
-<div class="field">
-<label>Целевая аудитория</label>
-<div class="hint">Кто будет пользоваться сайтом? Возраст, интересы</div>
-<textarea name="target" data-t></textarea>
-</div>
-
-<div class="field">
-<label>Главные цели сайта</label>
-<div class="chk-group" data-c="goals">
-<div class="chk-item" data-v="Продажи"><div class="chk-box"></div><div class="chk-label">Продажи товаров/услуг</div></div>
-<div class="chk-item" data-v="Лиды"><div class="chk-box"></div><div class="chk-label">Генерация лидов</div></div>
-<div class="chk-item" data-v="Презентация"><div class="chk-box"></div><div class="chk-label">Презентация компании</div></div>
-<div class="chk-item" data-v="Портфолио"><div class="chk-box"></div><div class="chk-label">Показать портфолио</div></div>
-<div class="chk-item" data-v="Контент"><div class="chk-box"></div><div class="chk-label">Информирование</div></div>
-<div class="chk-item" data-v="Инвестиции"><div class="chk-box"></div><div class="chk-label">Привлечение инвестиций</div></div>
+<!-- Q8 -->
+<div class="slide">
+<div class="q-num">Вопрос 8 из 20</div>
+<div class="q-title">👥 Целевая аудитория</div>
+<div class="q-subtitle">Кто будет пользоваться сайтом?</div>
+<div class="q-body">
+<div class="hint">Возраст, интересы, потребности</div>
+<textarea id="q8" placeholder="Например: Предприниматели 30-45 лет, ищут надёжного поставщика..."></textarea>
 </div>
 </div>
 
+<!-- Q9 -->
+<div class="slide">
+<div class="q-num">Вопрос 9 из 20</div>
+<div class="q-title">🎯 Главные цели сайта</div>
+<div class="q-subtitle">Что должен делать сайт?</div>
+<div class="q-body">
+<div class="hint">Можно выбрать несколько вариантов</div>
+<div class="opts" data-type="checkbox" data-id="q9">
+<div class="opt"><div class="opt-icon">💰</div><div class="opt-txt"><div class="opt-title">Продажи товаров/услуг</div></div><div class="opt-check"></div></div>
+<div class="opt"><div class="opt-icon">📞</div><div class="opt-txt"><div class="opt-title">Генерация лидов (заявок)</div></div><div class="opt-check"></div></div>
+<div class="opt"><div class="opt-icon">🎭</div><div class="opt-txt"><div class="opt-title">Презентация компании</div></div><div class="opt-check"></div></div>
+<div class="opt"><div class="opt-icon">🖼</div><div class="opt-txt"><div class="opt-title">Показать портфолио работ</div></div><div class="opt-check"></div></div>
+<div class="opt"><div class="opt-icon">📰</div><div class="opt-txt"><div class="opt-title">Информирование / контент</div></div><div class="opt-check"></div></div>
+<div class="opt"><div class="opt-icon">💎</div><div class="opt-txt"><div class="opt-title">Привлечение инвестиций</div></div><div class="opt-check"></div></div>
 </div>
-</div>
-
-<!-- 04 Дизайн -->
-<div class="sec" data-sec>
-<div class="sec-hdr" data-toggle><div class="sec-num">04</div><div class="sec-title">Дизайн и стиль</div><div class="sec-arr">▾</div></div>
-<div class="sec-body">
-
-<div class="field">
-<label>Примеры сайтов, которые нравятся</label>
-<div class="hint">2-3 ссылки и что именно нравится</div>
-<textarea name="examples" data-t placeholder="https://... — нравится цветовая гамма"></textarea>
-</div>
-
-<div class="field">
-<label>Стиль дизайна</label>
-<div class="chk-group" data-c="style">
-<div class="chk-item" data-v="Минималистичный"><div class="chk-box"></div><div class="chk-label">Минималистичный</div></div>
-<div class="chk-item" data-v="Современный"><div class="chk-box"></div><div class="chk-label">Современный</div></div>
-<div class="chk-item" data-v="Корпоративный"><div class="chk-box"></div><div class="chk-label">Корпоративный</div></div>
-<div class="chk-item" data-v="Яркий"><div class="chk-box"></div><div class="chk-label">Яркий / креативный</div></div>
-<div class="chk-item" data-v="Премиум"><div class="chk-box"></div><div class="chk-label">Премиум / люкс</div></div>
-<div class="chk-item" data-v="Молодёжный"><div class="chk-box"></div><div class="chk-label">Молодёжный</div></div>
 </div>
 </div>
 
-<div class="field">
-<label>Цветовые предпочтения (необязательно)</label>
-<input type="text" name="colors" data-t placeholder="Например: синий и белый">
-</div>
-
-</div>
-</div>
-
-<!-- 05 Функциональность -->
-<div class="sec" data-sec>
-<div class="sec-hdr" data-toggle><div class="sec-num">05</div><div class="sec-title">Функциональность</div><div class="sec-arr">▾</div></div>
-<div class="sec-body">
-
-<div class="field">
-<label>Необходимые функции</label>
-<div class="chk-group" data-c="functions">
-<div class="chk-item" data-v="Форма заявки"><div class="chk-box"></div><div class="chk-label">Форма заявки</div></div>
-<div class="chk-item" data-v="Онлайн-чат"><div class="chk-box"></div><div class="chk-label">Онлайн-чат</div></div>
-<div class="chk-item" data-v="CRM"><div class="chk-box"></div><div class="chk-label">Интеграция с CRM</div></div>
-<div class="chk-item" data-v="Калькулятор"><div class="chk-box"></div><div class="chk-label">Калькулятор</div></div>
-<div class="chk-item" data-v="Личный кабинет"><div class="chk-box"></div><div class="chk-label">Личный кабинет</div></div>
-<div class="chk-item" data-v="Блог"><div class="chk-box"></div><div class="chk-label">Блог / новости</div></div>
-<div class="chk-item" data-v="Корзина"><div class="chk-box"></div><div class="chk-label">Корзина и оплата</div></div>
-<div class="chk-item" data-v="Поиск"><div class="chk-box"></div><div class="chk-label">Фильтры и поиск</div></div>
-<div class="chk-item" data-v="Мультиязычность"><div class="chk-box"></div><div class="chk-label">Мультиязычность</div></div>
-<div class="chk-item" data-v="Анимации"><div class="chk-box"></div><div class="chk-label">Анимации</div></div>
+<!-- Q10 -->
+<div class="slide">
+<div class="q-num">Вопрос 10 из 20</div>
+<div class="q-title">🔗 Примеры сайтов</div>
+<div class="q-subtitle">Какие сайты вам нравятся?</div>
+<div class="q-body">
+<div class="hint">Скиньте 2-3 ссылки и напишите что именно нравится</div>
+<textarea id="q10" placeholder="https://example.com — нравится минимализм и цветовая гамма"></textarea>
 </div>
 </div>
 
-<div class="field">
-<label>Нужна ли разработка?</label>
-<select name="development" data-t>
-<option value="">Выберите вариант</option>
-<option value="Полная разработка на CMS">Да, полная разработка на CMS</option>
-<option value="Только вёрстка">Да, но только вёрстка</option>
-<option value="Только дизайн">Нет, только дизайн-макеты</option>
-<option value="Не уверен">Не уверен, посоветуйте</option>
-</select>
+<!-- Q11 -->
+<div class="slide">
+<div class="q-num">Вопрос 11 из 20</div>
+<div class="q-title">🎨 Стиль дизайна</div>
+<div class="q-subtitle">Какой стиль предпочитаете?</div>
+<div class="q-body">
+<div class="hint">Можно выбрать несколько</div>
+<div class="opts" data-type="checkbox" data-id="q11">
+<div class="opt"><div class="opt-icon">⬜</div><div class="opt-txt"><div class="opt-title">Минималистичный</div></div><div class="opt-check"></div></div>
+<div class="opt"><div class="opt-icon">🚀</div><div class="opt-txt"><div class="opt-title">Современный / технологичный</div></div><div class="opt-check"></div></div>
+<div class="opt"><div class="opt-icon">🏛</div><div class="opt-txt"><div class="opt-title">Корпоративный / строгий</div></div><div class="opt-check"></div></div>
+<div class="opt"><div class="opt-icon">🌈</div><div class="opt-txt"><div class="opt-title">Яркий / креативный</div></div><div class="opt-check"></div></div>
+<div class="opt"><div class="opt-icon">💎</div><div class="opt-txt"><div class="opt-title">Премиум / люкс</div></div><div class="opt-check"></div></div>
+<div class="opt"><div class="opt-icon">⚡</div><div class="opt-txt"><div class="opt-title">Молодёжный / динамичный</div></div><div class="opt-check"></div></div>
 </div>
-
-</div>
-</div>
-
-<!-- 06 Материалы -->
-<div class="sec" data-sec>
-<div class="sec-hdr" data-toggle><div class="sec-num">06</div><div class="sec-title">Материалы</div><div class="sec-arr">▾</div></div>
-<div class="sec-body">
-
-<div class="field">
-<label>Что уже есть?</label>
-<div class="chk-group" data-c="materials">
-<div class="chk-item" data-v="Логотип"><div class="chk-box"></div><div class="chk-label">Логотип и фирменный стиль</div></div>
-<div class="chk-item" data-v="Тексты"><div class="chk-box"></div><div class="chk-label">Тексты для страниц</div></div>
-<div class="chk-item" data-v="Фото"><div class="chk-box"></div><div class="chk-label">Фото и изображения</div></div>
-<div class="chk-item" data-v="Видео"><div class="chk-box"></div><div class="chk-label">Видео-материалы</div></div>
-<div class="chk-item" data-v="Ничего нет"><div class="chk-box"></div><div class="chk-label">Ничего нет</div></div>
 </div>
 </div>
 
+<!-- Q12 -->
+<div class="slide">
+<div class="q-num">Вопрос 12 из 20</div>
+<div class="q-title">🎨 Цветовые предпочтения</div>
+<div class="q-subtitle">Есть ли пожелания по цветам?</div>
+<div class="q-body">
+<div class="hint">Необязательно, можно пропустить</div>
+<input type="text" id="q12" placeholder="Например: синий и белый, тёмная тема">
 </div>
 </div>
 
-<!-- 07 Сроки и бюджет -->
-<div class="sec" data-sec>
-<div class="sec-hdr" data-toggle><div class="sec-num">07</div><div class="sec-title">Сроки и бюджет</div><div class="sec-arr">▾</div></div>
-<div class="sec-body">
-
-<div class="field">
-<label>Когда нужен результат?</label>
-<div class="rad-group" data-r="deadline">
-<div class="rad-item" data-v="До 2 недель"><div class="rad-circle"></div><div class="rad-label">Срочно</div></div>
-<div class="rad-item" data-v="2-4 недели"><div class="rad-circle"></div><div class="rad-label">2-4 нед</div></div>
-<div class="rad-item" data-v="1-2 месяца"><div class="rad-circle"></div><div class="rad-label">1-2 мес</div></div>
-<div class="rad-item" data-v="2-3 месяца"><div class="rad-circle"></div><div class="rad-label">2-3 мес</div></div>
-<div class="rad-item" data-v="3+ месяца"><div class="rad-circle"></div><div class="rad-label">3+ мес</div></div>
-<div class="rad-item" data-v="Гибко"><div class="rad-circle"></div><div class="rad-label">Гибко</div></div>
+<!-- Q13 -->
+<div class="slide">
+<div class="q-num">Вопрос 13 из 20</div>
+<div class="q-title">⚙️ Необходимые функции</div>
+<div class="q-subtitle">Что должно быть на сайте?</div>
+<div class="q-body">
+<div class="hint">Выберите всё нужное</div>
+<div class="opts" data-type="checkbox" data-id="q13">
+<div class="opt"><div class="opt-icon">📝</div><div class="opt-txt"><div class="opt-title">Форма заявки</div></div><div class="opt-check"></div></div>
+<div class="opt"><div class="opt-icon">💬</div><div class="opt-txt"><div class="opt-title">Онлайн-чат</div></div><div class="opt-check"></div></div>
+<div class="opt"><div class="opt-icon">🔗</div><div class="opt-txt"><div class="opt-title">Интеграция с CRM</div></div><div class="opt-check"></div></div>
+<div class="opt"><div class="opt-icon">🧮</div><div class="opt-txt"><div class="opt-title">Калькулятор</div></div><div class="opt-check"></div></div>
+<div class="opt"><div class="opt-icon">👤</div><div class="opt-txt"><div class="opt-title">Личный кабинет</div></div><div class="opt-check"></div></div>
+<div class="opt"><div class="opt-icon">📰</div><div class="opt-txt"><div class="opt-title">Блог / новости</div></div><div class="opt-check"></div></div>
+<div class="opt"><div class="opt-icon">🛒</div><div class="opt-txt"><div class="opt-title">Корзина и оплата</div></div><div class="opt-check"></div></div>
+<div class="opt"><div class="opt-icon">🔍</div><div class="opt-txt"><div class="opt-title">Фильтры и поиск</div></div><div class="opt-check"></div></div>
+<div class="opt"><div class="opt-icon">🌍</div><div class="opt-txt"><div class="opt-title">Мультиязычность</div></div><div class="opt-check"></div></div>
+<div class="opt"><div class="opt-icon">✨</div><div class="opt-txt"><div class="opt-title">Анимации / интерактив</div></div><div class="opt-check"></div></div>
 </div>
-</div>
-
-<div class="field">
-<label>Ориентировочный бюджет</label>
-<select name="budget" data-t>
-<option value="">Выберите вариант</option>
-<option value="60 000 - 100 000 ₽">60 000 - 100 000 ₽</option>
-<option value="100 000 - 150 000 ₽">100 000 - 150 000 ₽</option>
-<option value="150 000 - 250 000 ₽">150 000 - 250 000 ₽</option>
-<option value="250 000 - 500 000 ₽">250 000 - 500 000 ₽</option>
-<option value="Более 500 000 ₽">Более 500 000 ₽</option>
-<option value="Жду оценки">Не определился, жду оценки</option>
-</select>
-</div>
-
 </div>
 </div>
 
-<!-- 08 Дополнительно -->
-<div class="sec" data-sec>
-<div class="sec-hdr" data-toggle><div class="sec-num">08</div><div class="sec-title">Дополнительно</div><div class="sec-arr">▾</div></div>
-<div class="sec-body">
-
-<div class="field">
-<label>Ещё пожелания (необязательно)</label>
-<textarea name="extra" data-t placeholder="Всё что считаете важным"></textarea>
+<!-- Q14 -->
+<div class="slide">
+<div class="q-num">Вопрос 14 из 20</div>
+<div class="q-title">💻 Нужна ли разработка?</div>
+<div class="q-subtitle">Только дизайн или с вёрсткой?</div>
+<div class="q-body">
+<div class="opts" data-type="radio" data-id="q14">
+<div class="opt"><div class="opt-icon">🏗</div><div class="opt-txt"><div class="opt-title">Полная разработка на CMS</div></div><div class="opt-radio"></div></div>
+<div class="opt"><div class="opt-icon">📄</div><div class="opt-txt"><div class="opt-title">Только вёрстка (HTML/CSS)</div></div><div class="opt-radio"></div></div>
+<div class="opt"><div class="opt-icon">🎨</div><div class="opt-txt"><div class="opt-title">Только дизайн-макеты</div></div><div class="opt-radio"></div></div>
+<div class="opt"><div class="opt-icon">🤔</div><div class="opt-txt"><div class="opt-title">Не уверен, посоветуйте</div></div><div class="opt-radio"></div></div>
 </div>
-
-</div>
-</div>
-
-<!-- 09 Контакты -->
-<div class="sec" data-sec>
-<div class="sec-hdr" data-toggle><div class="sec-num">09</div><div class="sec-title">Контактная информация</div><div class="sec-arr">▾</div></div>
-<div class="sec-body">
-
-<div class="field">
-<label>Ваше имя</label>
-<input type="text" name="contact_name" data-t>
-</div>
-
-<div class="field">
-<label>Как с вами связаться?</label>
-<input type="text" name="contact" data-t placeholder="Telegram, WhatsApp, телефон или email">
-</div>
-
 </div>
 </div>
 
+<!-- Q15 -->
+<div class="slide">
+<div class="q-num">Вопрос 15 из 20</div>
+<div class="q-title">📦 Что уже есть?</div>
+<div class="q-subtitle">Какие материалы у вас готовы?</div>
+<div class="q-body">
+<div class="opts" data-type="checkbox" data-id="q15">
+<div class="opt"><div class="opt-icon">🎨</div><div class="opt-txt"><div class="opt-title">Логотип и фирменный стиль</div></div><div class="opt-check"></div></div>
+<div class="opt"><div class="opt-icon">📝</div><div class="opt-txt"><div class="opt-title">Тексты для страниц</div></div><div class="opt-check"></div></div>
+<div class="opt"><div class="opt-icon">📸</div><div class="opt-txt"><div class="opt-title">Фото и изображения</div></div><div class="opt-check"></div></div>
+<div class="opt"><div class="opt-icon">🎬</div><div class="opt-txt"><div class="opt-title">Видео-материалы</div></div><div class="opt-check"></div></div>
+<div class="opt"><div class="opt-icon">🆘</div><div class="opt-txt"><div class="opt-title">Ничего нет, нужна помощь</div></div><div class="opt-check"></div></div>
+</div>
+</div>
+</div>
+
+<!-- Q16 -->
+<div class="slide">
+<div class="q-num">Вопрос 16 из 20</div>
+<div class="q-title">⏱ Когда нужен результат?</div>
+<div class="q-subtitle">Какие сроки?</div>
+<div class="q-body">
+<div class="opts" data-type="radio" data-id="q16">
+<div class="opt"><div class="opt-icon">🔥</div><div class="opt-txt"><div class="opt-title">Срочно (до 2 недель)</div></div><div class="opt-radio"></div></div>
+<div class="opt"><div class="opt-icon">⚡</div><div class="opt-txt"><div class="opt-title">2-4 недели</div></div><div class="opt-radio"></div></div>
+<div class="opt"><div class="opt-icon">📅</div><div class="opt-txt"><div class="opt-title">1-2 месяца</div></div><div class="opt-radio"></div></div>
+<div class="opt"><div class="opt-icon">🗓</div><div class="opt-txt"><div class="opt-title">2-3 месяца</div></div><div class="opt-radio"></div></div>
+<div class="opt"><div class="opt-icon">📆</div><div class="opt-txt"><div class="opt-title">Больше 3 месяцев</div></div><div class="opt-radio"></div></div>
+<div class="opt"><div class="opt-icon">🤝</div><div class="opt-txt"><div class="opt-title">Гибкие сроки</div></div><div class="opt-radio"></div></div>
+</div>
+</div>
+</div>
+
+<!-- Q17 -->
+<div class="slide">
+<div class="q-num">Вопрос 17 из 20</div>
+<div class="q-title">💰 Ориентировочный бюджет</div>
+<div class="q-subtitle">Сколько готовы инвестировать?</div>
+<div class="q-body">
+<div class="opts" data-type="radio" data-id="q17">
+<div class="opt"><div class="opt-icon">💵</div><div class="opt-txt"><div class="opt-title">60 000 - 100 000 ₽</div></div><div class="opt-radio"></div></div>
+<div class="opt"><div class="opt-icon">💴</div><div class="opt-txt"><div class="opt-title">100 000 - 150 000 ₽</div></div><div class="opt-radio"></div></div>
+<div class="opt"><div class="opt-icon">💶</div><div class="opt-txt"><div class="opt-title">150 000 - 250 000 ₽</div></div><div class="opt-radio"></div></div>
+<div class="opt"><div class="opt-icon">💷</div><div class="opt-txt"><div class="opt-title">250 000 - 500 000 ₽</div></div><div class="opt-radio"></div></div>
+<div class="opt"><div class="opt-icon">💎</div><div class="opt-txt"><div class="opt-title">Более 500 000 ₽</div></div><div class="opt-radio"></div></div>
+<div class="opt"><div class="opt-icon">🤔</div><div class="opt-txt"><div class="opt-title">Жду вашей оценки</div></div><div class="opt-radio"></div></div>
+</div>
+</div>
+</div>
+
+<!-- Q18 -->
+<div class="slide">
+<div class="q-num">Вопрос 18 из 20</div>
+<div class="q-title">💭 Дополнительные пожелания</div>
+<div class="q-subtitle">Есть что добавить?</div>
+<div class="q-body">
+<div class="hint">Необязательно, можно пропустить</div>
+<textarea id="q18" placeholder="Всё что считаете важным и что мы не спросили..."></textarea>
+</div>
+</div>
+
+<!-- Q19 -->
+<div class="slide">
+<div class="q-num">Вопрос 19 из 20</div>
+<div class="q-title">👤 Ваше имя</div>
+<div class="q-subtitle">Как к вам обращаться?</div>
+<div class="q-body">
+<input type="text" id="q19" placeholder="Введите ваше имя">
+</div>
+</div>
+
+<!-- Q20 -->
+<div class="slide">
+<div class="q-num">Вопрос 20 из 20</div>
+<div class="q-title">📞 Контакт для связи</div>
+<div class="q-subtitle">Как с вами связаться?</div>
+<div class="q-body">
+<input type="text" id="q20" placeholder="Telegram, WhatsApp, телефон или email">
+</div>
+</div>
+
+<!-- FINAL -->
+<div class="slide">
+<div class="final">
+<div class="final-icon">✅</div>
+<h2>Отлично! Бриф готов</h2>
+<p>Мы изучим вашу заявку и свяжемся с вами для обсуждения деталей проекта</p>
+<div class="final-summary">
+<div class="final-row"><div class="final-lbl">Компания</div><div class="final-val" id="sum1">—</div></div>
+<div class="final-row"><div class="final-lbl">Бюджет</div><div class="final-val" id="sum17">—</div></div>
+<div class="final-row"><div class="final-lbl">Сроки</div><div class="final-val" id="sum16">—</div></div>
+</div>
+</div>
+</div>
+
+</div>
+
+<div class="btns">
+<button class="btn btn-back" id="btnBack" disabled>← Назад</button>
+<button class="btn btn-next" id="btnNext">Далее →</button>
 </div>
 
 <script>
 let tg=window.Telegram.WebApp;
 tg.ready();
 tg.expand();
-tg.MainButton.text="Отправить бриф";
-tg.MainButton.color="#2B5CE6";
-tg.MainButton.show();
-tg.MainButton.disable();
 
-// Toggle sections
-document.querySelectorAll('[data-toggle]').forEach(btn=>{
-btn.addEventListener('click',()=>{
-btn.closest('.sec').classList.toggle('open');
-});
-});
+let current=0;
+const slides=document.querySelectorAll('.slide');
+const total=slides.length;
+const answers={};
 
-// Radio groups
-document.querySelectorAll('[data-r]').forEach(group=>{
-group.querySelectorAll('.rad-item').forEach(item=>{
-item.addEventListener('click',()=>{
-group.querySelectorAll('.rad-item').forEach(i=>i.classList.remove('on'));
-item.classList.add('on');
-updateProg();
-});
-});
-});
-
-// Checkbox groups
-document.querySelectorAll('[data-c]').forEach(group=>{
-group.querySelectorAll('.chk-item').forEach(item=>{
-item.addEventListener('click',()=>{
-item.classList.toggle('on');
-updateProg();
-});
-});
-});
-
-// Progress
-function updateProg(){
-let total=document.querySelectorAll('[data-t]').length;
-let n=0;
-document.querySelectorAll('[data-t]').forEach(e=>{if(e.value.trim())n++});
-document.querySelectorAll('[data-r]').forEach(g=>{if(g.querySelector('.on'))n++});
-document.querySelectorAll('[data-c]').forEach(g=>{if(g.querySelector('.on'))n++});
-const p=Math.round(n/total*100);
-document.getElementById('pFill').style.width=p+'%';
-document.getElementById('pPct').textContent=p+'%';
-if(p>=30){tg.MainButton.enable()}else{tg.MainButton.disable()}
+function updateUI(){
+document.getElementById('step').textContent=`${current+1}/${total}`;
+const pct=Math.round((current+1)/total*100);
+document.getElementById('pFill').style.width=pct+'%';
+document.getElementById('pPct').textContent=pct+'%';
+document.getElementById('btnBack').disabled=current===0;
+document.getElementById('btnNext').textContent=current===total-1?'Готово ✓':'Далее →';
+slides.forEach((s,i)=>s.classList.toggle('active',i===current));
 }
 
-document.querySelectorAll('[data-t]').forEach(e=>{
-e.addEventListener('input',updateProg);
-e.addEventListener('change',updateProg);
+function goNext(){
+if(current<total-1){
+current++;
+updateUI();
+}else{
+sendData();
+}
+}
+
+function goBack(){
+if(current>0){
+current--;
+updateUI();
+}
+}
+
+document.getElementById('btnNext').addEventListener('click',goNext);
+document.getElementById('btnBack').addEventListener('click',goBack);
+
+// Radio
+document.querySelectorAll('[data-type="radio"]').forEach(group=>{
+const id=group.dataset.id;
+group.querySelectorAll('.opt').forEach((opt,idx)=>{
+opt.addEventListener('click',()=>{
+group.querySelectorAll('.opt').forEach(o=>o.classList.remove('sel'));
+opt.classList.add('sel');
+answers[id]=opt.querySelector('.opt-title').textContent;
+});
+});
 });
 
-// Collect data
-tg.MainButton.onClick(()=>{
-let data={};
-document.querySelectorAll('[data-t]').forEach(e=>{
-if(e.value.trim())data[e.name]=e.value.trim();
+// Checkbox
+document.querySelectorAll('[data-type="checkbox"]').forEach(group=>{
+const id=group.dataset.id;
+group.querySelectorAll('.opt').forEach(opt=>{
+opt.addEventListener('click',()=>{
+opt.classList.toggle('sel');
+const selected=[...group.querySelectorAll('.opt.sel')].map(o=>o.querySelector('.opt-title').textContent);
+answers[id]=selected.length?selected.join(', '):'';
 });
-document.querySelectorAll('[data-r]').forEach(g=>{
-const name=g.getAttribute('data-r');
-const sel=g.querySelector('.on');
-if(sel)data[name]=sel.getAttribute('data-v');
 });
-document.querySelectorAll('[data-c]').forEach(g=>{
-const name=g.getAttribute('data-c');
-const vals=[...g.querySelectorAll('.on')].map(i=>i.getAttribute('data-v'));
-if(vals.length)data[name]=vals.join(', ');
-});
-tg.sendData(JSON.stringify(data));
 });
 
-updateProg();
+// Text inputs
+['q1','q2','q4','q7','q8','q10','q12','q18','q19','q20'].forEach(id=>{
+const el=document.getElementById(id);
+if(el){
+el.addEventListener('input',()=>{
+answers[id]=el.value.trim();
+});
+}
+});
+
+function sendData(){
+// Summary
+document.getElementById('sum1').textContent=answers.q1||'—';
+document.getElementById('sum17').textContent=answers.q17||'—';
+document.getElementById('sum16').textContent=answers.q16||'—';
+
+// Send to Telegram
+tg.sendData(JSON.stringify(answers));
+}
+
+updateUI();
 </script>
 </body>
 </html>
