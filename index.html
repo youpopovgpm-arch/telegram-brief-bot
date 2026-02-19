@@ -29,7 +29,7 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);line-
 .prog-pct{font-size:12px;font-weight:600;color:var(--blue);min-width:32px}
 
 /* QUIZ */
-.quiz{height:calc(100vh - 280px);display:flex;flex-direction:column;overflow:hidden}
+.quiz{height:calc(100vh - 280px);display:flex;flex-direction:column;overflow:hidden;margin-bottom:80px}
 .slide{display:none;flex-direction:column;height:100%;padding:24px 20px 40px;animation:fadeIn .3s}
 .slide.active{display:flex}
 @keyframes fadeIn{from{opacity:0;transform:translateX(20px)}to{opacity:1;transform:translateX(0)}}
@@ -78,7 +78,7 @@ select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/
 .opt.sel .opt-check::after{display:block}
 
 /* BUTTONS */
-.btns{display:flex;gap:10px;padding:16px 20px 24px;background:var(--bg);box-shadow:0 -4px 12px rgba(0,0,0,.08)}
+.btns{display:flex;gap:10px;padding:16px 20px calc(24px + env(safe-area-inset-bottom));background:var(--bg);box-shadow:0 -4px 12px rgba(0,0,0,.08);position:fixed;bottom:0;left:0;right:0;z-index:200}
 .btn{flex:1;padding:16px;border:none;border-radius:14px;font-family:'Geologica',sans-serif;font-size:15px;font-weight:700;cursor:pointer;transition:all .2s;-webkit-tap-highlight-color:transparent;min-height:56px}
 .btn-back{background:var(--white);color:var(--navy);border:2px solid var(--border)}
 .btn-back:active{background:#f5f5f5}
@@ -532,9 +532,6 @@ document.querySelector('.prog').style.display='none';
 document.querySelector('.q-num').style.display='none';
 document.querySelector('.q-subtitle').style.display='none';
 document.querySelector('.quiz').style.height='calc(100vh - 140px)';
-// Кнопки остаются но становятся меньше
-document.querySelector('.btns').style.padding='8px 20px 12px';
-document.querySelectorAll('.btn').forEach(b=>b.style.minHeight='48px');
 });
 
 // При потере фокуса - возвращаем всё
@@ -545,8 +542,6 @@ document.querySelector('.prog').style.display='flex';
 document.querySelector('.q-num').style.display='block';
 document.querySelector('.q-subtitle').style.display='block';
 document.querySelector('.quiz').style.height='calc(100vh - 280px)';
-document.querySelector('.btns').style.padding='16px 20px 24px';
-document.querySelectorAll('.btn').forEach(b=>b.style.minHeight='56px');
 },100);
 });
 
