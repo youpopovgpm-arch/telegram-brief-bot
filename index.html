@@ -450,6 +450,12 @@ return;
 
 if(current<total-1){
 current++;
+// Обновляем сводку перед показом финального экрана
+if(current===total-1){
+document.getElementById('sum1').textContent=answers.q1||'—';
+document.getElementById('sum17').textContent=answers.q17||'—';
+document.getElementById('sum16').textContent=answers.q16||'—';
+}
 updateUI();
 }else{
 sendData();
@@ -502,11 +508,6 @@ el.style.borderColor='';
 });
 
 function sendData(){
-// Summary
-document.getElementById('sum1').textContent=answers.q1||'—';
-document.getElementById('sum17').textContent=answers.q17||'—';
-document.getElementById('sum16').textContent=answers.q16||'—';
-
 // Send to Telegram
 tg.sendData(JSON.stringify(answers));
 }
