@@ -521,6 +521,28 @@ answers[id]=el.value.trim();
 el.style.borderColor='';
 checkNextButton();
 });
+
+// При фокусе - минимизируем интерфейс
+el.addEventListener('focus',()=>{
+document.querySelector('.btns').style.display='none';
+document.querySelector('.hdr').style.display='none';
+document.querySelector('.prog').style.display='none';
+document.querySelector('.q-num').style.display='none';
+document.querySelector('.q-subtitle').style.display='none';
+document.querySelector('.quiz').style.height='calc(100vh - 60px)';
+});
+
+// При потере фокуса - возвращаем всё
+el.addEventListener('blur',()=>{
+setTimeout(()=>{
+document.querySelector('.btns').style.display='flex';
+document.querySelector('.hdr').style.display='block';
+document.querySelector('.prog').style.display='flex';
+document.querySelector('.q-num').style.display='block';
+document.querySelector('.q-subtitle').style.display='block';
+document.querySelector('.quiz').style.height='calc(100vh - 280px)';
+},100);
+});
 }
 });
 
