@@ -4,11 +4,8 @@ import logging
 from datetime import datetime
 from telegram import Update, ReplyKeyboardMarkup, KeyboardButton, WebAppInfo, ReplyKeyboardRemove
 from telegram.ext import Application, CommandHandler, MessageHandler, filters, ContextTypes
-from reportlab.lib.pagesizes import A4
-from reportlab.pdfgen import canvas
-from reportlab.lib.units import mm
-from reportlab.pdfbase import pdfmetrics
-from reportlab.pdfbase.ttfonts import TTFont
+from openpyxl import Workbook
+from openpyxl.styles import Font, PatternFill, Alignment, Border, Side
 import io
 
 logging.basicConfig(
@@ -21,147 +18,167 @@ BOT_TOKEN = os.environ.get('BOT_TOKEN')
 WEB_APP_URL = os.environ.get('WEB_APP_URL')
 ADMIN_ID = 198218873
 
-def create_pdf_brief(data, user_info):
-    """Создаёт красивый PDF с брифом"""
-    buffer = io.BytesIO()
-    c = canvas.Canvas(buffer, pagesize=A4)
-    width, height = A4
+def create_xlsx_brief(data, user_info):
+    """Создаёт XLSX таблицу с брифом"""
+    wb = Workbook()
+    ws = wb.active
+    ws.title = "Бриф"
     
-    # Заголовок с градиентом (имитация)
-    c.setFillColorRGB(0.4, 0.49, 0.92)  # #667eea
-    c.rect(0, height-60*mm, width, 60*mm, fill=1, stroke=0)
+    # Стили
+    header_font = Font(name='Arial', size=11, bold=True, color='FFFFFF')
+    header_fill = PatternFill(start_color='0F1F3D', end_color='0F1F3D', fill_type='solid')
+    cell_font = Font(name='Arial', size=10)
+    border = Border(
+        left=Side(style='thin', color='D1D9F0'),
+        right=Side(style='thin', color='D1D9F0'),
+        top=Side(style='thin', color='D1D9F0'),
+        bottom=Side(style='thin', color='D1D9F0')
+    )
     
-    c.setFillColorRGB(1, 1, 1)
-    c.setFont("Helvetica-Bold", 24)
-    c.drawCentredString(width/2, height-35*mm, "БРИФ НА ДИЗАЙН САЙТА")
-    
-    c.setFont("Helvetica", 11)
-    c.drawCentredString(width/2, height-45*mm, f"Дата: {datetime.now().strftime('%d.%m.%Y %H:%M')}")
-    
-    y = height - 75*mm
-    
-    # Информация о клиенте
-    c.setFillColorRGB(0, 0, 0)
-    c.setFont("Helvetica-Bold", 10)
-    c.drawString(20*mm, y, f"Клиент: {user_info.get('name', 'N/A')} (@{user_info.get('username', 'нет')})")
-    y -= 5*mm
-    c.setFont("Helvetica", 9)
-    c.drawString(20*mm, y, f"ID: {user_info.get('id', 'N/A')}")
-    y -= 10*mm
-    
-    c.setLineWidth(0.5)
-    c.line(20*mm, y, width-20*mm, y)
-    y -= 8*mm
-    
-    # Данные брифа
-    sections = [
-        ("О КОМПАНИИ", [
-            ("Название", data.get('company')),
-            ("Деятельность", data.get('business')),
-            ("Что нужно", data.get('task_type')),
-            ("Текущий сайт", data.get('current_site')),
-        ]),
-        ("ТИП И СТРУКТУРА", [
-            ("Тип сайта", data.get('site_type')),
-            ("Страниц", data.get('pages_count')),
-            ("Разделы", data.get('key_pages')),
-        ]),
-        ("АУДИТОРИЯ И ЦЕЛИ", [
-            ("Аудитория", data.get('target_audience')),
-            ("Цели", data.get('goals')),
-        ]),
-        ("ДИЗАЙН", [
-            ("Примеры", data.get('examples')),
-            ("Стиль", data.get('style')),
-            ("Цвета", data.get('colors')),
-        ]),
-        ("ФУНКЦИИ И РАЗРАБОТКА", [
-            ("Функции", data.get('functions')),
-            ("Разработка", data.get('development')),
-            ("Материалы", data.get('materials')),
-        ]),
-        ("СРОКИ И БЮДЖЕТ", [
-            ("Сроки", data.get('deadline')),
-            ("Бюджет", data.get('budget')),
-        ]),
-        ("КОНТАКТЫ", [
-            ("Имя", data.get('contact_name')),
-            ("Контакт", data.get('contact')),
-        ]),
+    # Заголовки столбцов
+    headers = [
+        '📅 Дата', '🆔 ID', '👤 Имя', '📧 Контакт',
+        '🏢 Компания', '💼 Деятельность', '🌐 Текущий сайт',
+        '🎯 Задача', '📱 Тип сайта', '📊 Страниц', '📑 Разделы',
+        '👥 Аудитория', '🎯 Цели',
+        '🔗 Примеры', '🎨 Стиль', '🌈 Цвета',
+        '⚙️ Функции', '💻 Разработка', '📦 Материалы',
+        '⏱ Сроки', '💰 Бюджет', '💭 Дополнительно'
     ]
     
-    if data.get('extra'):
-        sections.append(("ДОПОЛНИТЕЛЬНО", [("Пожелания", data.get('extra'))]))
+    # Записываем заголовки
+    for col_num, header in enumerate(headers, 1):
+        cell = ws.cell(row=1, column=col_num)
+        cell.value = header
+        cell.font = header_font
+        cell.fill = header_fill
+        cell.alignment = Alignment(horizontal='center', vertical='center', wrap_text=True)
+        cell.border = border
     
-    for section_title, fields in sections:
-        if y < 40*mm:
-            c.showPage()
-            y = height - 20*mm
-        
-        # Заголовок секции
-        c.setFillColorRGB(0.4, 0.49, 0.92)
-        c.setFont("Helvetica-Bold", 11)
-        c.drawString(20*mm, y, section_title)
-        y -= 6*mm
-        
-        c.setFillColorRGB(0, 0, 0)
-        c.setFont("Helvetica", 9)
-        
-        for label, value in fields:
-            if not value or value == '—':
-                continue
-            
-            if y < 35*mm:
-                c.showPage()
-                y = height - 20*mm
-            
-            # Лейбл жирным
-            c.setFont("Helvetica-Bold", 9)
-            c.drawString(22*mm, y, f"{label}:")
-            y -= 4*mm
-            
-            # Значение с переносом
-            c.setFont("Helvetica", 9)
-            value_str = str(value)
-            max_width = width - 50*mm
-            
-            if len(value_str) > 80:
-                # Разбиваем на строки
-                words = value_str.split()
-                line = ""
-                for word in words:
-                    test_line = line + " " + word if line else word
-                    if c.stringWidth(test_line, "Helvetica", 9) < max_width:
-                        line = test_line
-                    else:
-                        c.drawString(25*mm, y, line)
-                        y -= 4*mm
-                        line = word
-                        if y < 35*mm:
-                            c.showPage()
-                            y = height - 20*mm
-                if line:
-                    c.drawString(25*mm, y, line)
-                    y -= 4*mm
-            else:
-                c.drawString(25*mm, y, value_str)
-                y -= 4*mm
-            
-            y -= 2*mm
-        
-        y -= 3*mm
+    # Данные
+    now = datetime.now()
+    row_data = [
+        now.strftime('%d.%m.%Y %H:%M'),
+        user_info.get('id', ''),
+        user_info.get('name', ''),
+        data.get('q20', ''),
+        data.get('q1', ''),
+        data.get('q2', ''),
+        data.get('q4', ''),
+        data.get('q3', ''),
+        data.get('q5', ''),
+        data.get('q6', ''),
+        data.get('q7', ''),
+        data.get('q8', ''),
+        data.get('q9', ''),
+        data.get('q10', ''),
+        data.get('q11', ''),
+        data.get('q12', ''),
+        data.get('q13', ''),
+        data.get('q14', ''),
+        data.get('q15', ''),
+        data.get('q16', ''),
+        data.get('q17', ''),
+        data.get('q18', ''),
+    ]
     
-    # Футер
-    c.setFont("Helvetica-Oblique", 8)
-    c.setFillColorRGB(0.5, 0.5, 0.5)
-    c.drawCentredString(width/2, 15*mm, "Документ создан автоматически")
+    # Записываем данные
+    for col_num, value in enumerate(row_data, 1):
+        cell = ws.cell(row=2, column=col_num)
+        cell.value = value if value else '—'
+        cell.font = cell_font
+        cell.alignment = Alignment(horizontal='left', vertical='top', wrap_text=True)
+        cell.border = border
     
-    c.save()
+    # Настройка ширины столбцов
+    ws.column_dimensions['A'].width = 16  # Дата
+    ws.column_dimensions['B'].width = 12  # ID
+    ws.column_dimensions['C'].width = 18  # Имя
+    ws.column_dimensions['D'].width = 20  # Контакт
+    ws.column_dimensions['E'].width = 20  # Компания
+    ws.column_dimensions['F'].width = 35  # Деятельность
+    ws.column_dimensions['G'].width = 20  # Сайт
+    ws.column_dimensions['H'].width = 22  # Задача
+    ws.column_dimensions['I'].width = 20  # Тип сайта
+    ws.column_dimensions['J'].width = 14  # Страниц
+    ws.column_dimensions['K'].width = 30  # Разделы
+    ws.column_dimensions['L'].width = 30  # Аудитория
+    ws.column_dimensions['M'].width = 25  # Цели
+    ws.column_dimensions['N'].width = 30  # Примеры
+    ws.column_dimensions['O'].width = 25  # Стиль
+    ws.column_dimensions['P'].width = 20  # Цвета
+    ws.column_dimensions['Q'].width = 30  # Функции
+    ws.column_dimensions['R'].width = 22  # Разработка
+    ws.column_dimensions['S'].width = 25  # Материалы
+    ws.column_dimensions['T'].width = 16  # Сроки
+    ws.column_dimensions['U'].width = 20  # Бюджет
+    ws.column_dimensions['V'].width = 35  # Дополнительно
+    
+    # Высота строк
+    ws.row_dimensions[1].height = 35
+    ws.row_dimensions[2].height = 80
+    
+    # Закрепляем первую строку
+    ws.freeze_panes = 'A2'
+    
+    # Сохраняем в буфер
+    buffer = io.BytesIO()
+    wb.save(buffer)
     buffer.seek(0)
     return buffer
 
+def format_message(data, user_info):
+    """Форматирует красивое сообщение с брифом"""
+    msg = f"""
+╔═══════════════════════════════════╗
+║  📋 <b>НОВАЯ ЗАЯВКА НА ДИЗАЙН САЙТА</b>  ║
+╚═══════════════════════════════════╝
+
+👤 <b>КЛИЕНТ</b>
+├ Имя: {data.get('q19', '—')}
+├ Контакт: {data.get('q20', '—')}
+└ ID: <code>{user_info.get('id', '—')}</code>
+
+🏢 <b>КОМПАНИЯ</b>
+├ Название: {data.get('q1', '—')}
+├ Деятельность: {data.get('q2', '—')[:100]}{"..." if len(data.get('q2', '')) > 100 else ''}
+└ Текущий сайт: {data.get('q4', 'Нет') if data.get('q4') else 'Нет'}
+
+🎯 <b>ПРОЕКТ</b>
+├ Задача: {data.get('q3', '—')}
+├ Тип: {data.get('q5', '—')}
+├ Страниц: {data.get('q6', '—')}
+└ Разделы: {data.get('q7', '—')[:80]}{"..." if len(data.get('q7', '')) > 80 else ''}
+
+👥 <b>АУДИТОРИЯ</b>
+└ {data.get('q8', '—')[:120]}{"..." if len(data.get('q8', '')) > 120 else ''}
+
+🎨 <b>ДИЗАЙН</b>
+├ Стиль: {data.get('q11', '—')}
+└ Цвета: {data.get('q12', 'Не указано') if data.get('q12') else 'Не указано'}
+
+⚙️ <b>ФУНКЦИОНАЛ</b>
+├ Функции: {data.get('q13', '—')[:100]}{"..." if len(data.get('q13', '')) > 100 else ''}
+└ Разработка: {data.get('q14', '—')}
+
+📦 <b>МАТЕРИАЛЫ</b>
+└ {data.get('q15', '—')}
+
+💰 <b>БЮДЖЕТ И СРОКИ</b>
+├ 💵 Бюджет: <b>{data.get('q17', '—')}</b>
+└ ⏱ Сроки: <b>{data.get('q16', '—')}</b>
+"""
+    
+    # Добавляем дополнительно если есть
+    if data.get('q18'):
+        msg += f"\n💭 <b>ДОПОЛНИТЕЛЬНО</b>\n└ {data.get('q18')[:200]}{'...' if len(data.get('q18', '')) > 200 else ''}\n"
+    
+    msg += f"\n📅 Дата: {datetime.now().strftime('%d.%m.%Y %H:%M')}"
+    
+    return msg
+
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    """Стартовое сообщение с кнопкой"""
+    """Стартовое сообщение"""
     user = update.effective_user
     logger.info(f"🟢 {user.id} (@{user.username}) запустил бота")
     
@@ -177,14 +194,14 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     )
 
 async def web_app_data(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    """Обработка данных из формы"""
+    """Обработка данных из квиза"""
     try:
         user = update.effective_user
         logger.info(f"🔥 ДАННЫЕ от {user.id}")
         
         raw_data = update.effective_message.web_app_data.data
         data = json.loads(raw_data)
-        logger.info(f"✅ Parsed: {len(data)} полей")
+        logger.info(f"✅ Получено {len(data)} полей")
         
         # Информация о пользователе
         user_info = {
@@ -193,24 +210,32 @@ async def web_app_data(update: Update, context: ContextTypes.DEFAULT_TYPE):
             'username': user.username
         }
         
-        # Создаём PDF
-        pdf_buffer = create_pdf_brief(data, user_info)
-        filename = f"brief_{user.id}_{datetime.now().strftime('%Y%m%d_%H%M')}.pdf"
+        # Создаём XLSX
+        xlsx_buffer = create_xlsx_brief(data, user_info)
+        
+        # Формируем имя файла
+        client_name = data.get('q19', 'Клиент').replace(' ', '-')
+        now = datetime.now()
+        filename = f"{now.strftime('%d.%m.%Y')}_{user.id}_{client_name}.xlsx"
+        
+        # Формируем сообщение
+        message_text = format_message(data, user_info)
         
         # Отправляем админу
-        await context.bot.send_document(
+        await context.bot.send_message(
             chat_id=ADMIN_ID,
-            document=pdf_buffer,
-            filename=filename,
-            caption=f"📋 <b>Новый бриф</b>\n\n"
-                    f"👤 {user.full_name}\n"
-                    f"🆔 <code>{user.id}</code>\n"
-                    f"📧 @{user.username or 'нет'}\n"
-                    f"💰 Бюджет: {data.get('budget', '—')}\n"
-                    f"⏰ Сроки: {data.get('deadline', '—')}",
+            text=message_text,
             parse_mode='HTML'
         )
-        logger.info(f"✅ PDF отправлен админу")
+        
+        await context.bot.send_document(
+            chat_id=ADMIN_ID,
+            document=xlsx_buffer,
+            filename=filename,
+            caption="📊 Полная информация в таблице"
+        )
+        
+        logger.info(f"✅ Бриф отправлен админу")
         
         # Подтверждение клиенту
         await update.message.reply_text(
