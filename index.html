@@ -46,7 +46,10 @@ width:100%;padding:14px 16px;border:2px solid var(--border);border-radius:12px;
 font-family:'Inter',sans-serif;font-size:16px;color:var(--text);background:var(--white);
 outline:none;transition:all .2s;resize:vertical;-webkit-appearance:none;appearance:none;
 }
-input:focus,textarea:focus,select:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(43,92,230,.1)}
+input:focus,textarea:focus,select:focus{
+border-color:var(--blue);
+box-shadow:0 0 0 3px rgba(43,92,230,.1);
+}
 textarea{min-height:120px}
 select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12'%3E%3Cpath fill='%231A1A2E' d='M6 9L1 4h10z'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 16px center;padding-right:40px}
 .hint{font-size:13px;color:var(--muted);margin-bottom:12px;font-style:italic}
@@ -522,27 +525,41 @@ el.style.borderColor='';
 checkNextButton();
 });
 
-// При фокусе - минимизируем интерфейс
+// При фокусе - минимизируем интерфейс но оставляем кнопки
 el.addEventListener('focus',()=>{
-document.querySelector('.btns').style.display='none';
 document.querySelector('.hdr').style.display='none';
 document.querySelector('.prog').style.display='none';
 document.querySelector('.q-num').style.display='none';
 document.querySelector('.q-subtitle').style.display='none';
-document.querySelector('.quiz').style.height='calc(100vh - 60px)';
+document.querySelector('.quiz').style.height='calc(100vh - 140px)';
+// Кнопки остаются но становятся меньше
+document.querySelector('.btns').style.padding='8px 20px 12px';
+document.querySelectorAll('.btn').forEach(b=>b.style.minHeight='48px');
 });
 
 // При потере фокуса - возвращаем всё
 el.addEventListener('blur',()=>{
 setTimeout(()=>{
-document.querySelector('.btns').style.display='flex';
 document.querySelector('.hdr').style.display='block';
 document.querySelector('.prog').style.display='flex';
 document.querySelector('.q-num').style.display='block';
 document.querySelector('.q-subtitle').style.display='block';
 document.querySelector('.quiz').style.height='calc(100vh - 280px)';
+document.querySelector('.btns').style.padding='16px 20px 24px';
+document.querySelectorAll('.btn').forEach(b=>b.style.minHeight='56px');
 },100);
 });
+
+// Enter = Далее (только для input, не для textarea)
+if(el.tagName==='INPUT'){
+el.addEventListener('keypress',(e)=>{
+if(e.key==='Enter'){
+e.preventDefault();
+el.blur();
+setTimeout(goNext,200);
+}
+});
+}
 }
 });
 
