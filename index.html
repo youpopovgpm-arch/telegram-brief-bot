@@ -30,7 +30,7 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);line-
 
 /* QUIZ */
 .quiz{height:calc(100vh - 280px);display:flex;flex-direction:column;overflow:hidden}
-.slide{display:none;flex-direction:column;height:100%;padding:24px 20px 40px;animation:fadeIn .3s;overflow-y:auto}
+.slide{display:none;flex-direction:column;height:100%;padding:24px 20px 40px;animation:fadeIn .3s}
 .slide.active{display:flex}
 @keyframes fadeIn{from{opacity:0;transform:translateX(20px)}to{opacity:1;transform:translateX(0)}}
 
@@ -38,17 +38,16 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);line-
 .q-title{font-family:'Geologica',sans-serif;font-size:20px;font-weight:700;color:var(--navy);margin-bottom:4px;line-height:1.3}
 .q-subtitle{font-size:14px;color:var(--muted);margin-bottom:20px}
 
-.q-body{flex:1;overflow-y:auto;padding-bottom:20px;-webkit-overflow-scrolling:touch}
+.q-body{flex:1;overflow-y:auto;padding-bottom:20px}
 
 /* INPUT */
 input[type=text],textarea,select{
 width:100%;padding:14px 16px;border:2px solid var(--border);border-radius:12px;
 font-family:'Inter',sans-serif;font-size:16px;color:var(--text);background:var(--white);
 outline:none;transition:all .2s;resize:vertical;-webkit-appearance:none;appearance:none;
-margin-bottom:120px;
 }
 input:focus,textarea:focus,select:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(43,92,230,.1)}
-textarea{min-height:120px;margin-bottom:150px}
+textarea{min-height:120px}
 select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12'%3E%3Cpath fill='%231A1A2E' d='M6 9L1 4h10z'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 16px center;padding-right:40px}
 .hint{font-size:13px;color:var(--muted);margin-bottom:12px;font-style:italic}
 
@@ -417,21 +416,6 @@ let tg=window.Telegram.WebApp;
 tg.ready();
 tg.expand();
 
-// Обработка изменения высоты viewport (клавиатура)
-let lastHeight=window.innerHeight;
-window.addEventListener('resize',()=>{
-const newHeight=window.innerHeight;
-const diff=lastHeight-newHeight;
-if(diff>100){
-// Клавиатура открылась
-document.querySelector('.quiz').style.height=`calc(100vh - 280px - ${diff}px)`;
-}else if(diff<-100){
-// Клавиатура закрылась
-document.querySelector('.quiz').style.height='calc(100vh - 280px)';
-}
-lastHeight=newHeight;
-});
-
 let current=0;
 const slides=document.querySelectorAll('.slide');
 const total=slides.length;
@@ -445,24 +429,39 @@ document.getElementById('pPct').textContent=pct+'%';
 document.getElementById('btnBack').disabled=current===0;
 document.getElementById('btnNext').textContent=current===total-1?'Готово ✓':'Далее →';
 slides.forEach((s,i)=>s.classList.toggle('active',i===current));
+checkNextButton();
 }
 
-function goNext(){
-// Validation for required fields
+function checkNextButton(){
 const currentSlide=slides[current];
 const requiredInput=currentSlide.querySelector('input[data-required],textarea[data-required]');
 const requiredGroup=currentSlide.querySelector('[data-required][data-type]');
+const btnNext=document.getElementById('btnNext');
 
-if(requiredInput && !requiredInput.value.trim()){
-requiredInput.style.borderColor='#e53e3e';
-requiredInput.focus();
-return;
+let isValid=true;
+
+if(requiredInput){
+isValid=requiredInput.value.trim()!=='';
 }
-if(requiredGroup && !requiredGroup.querySelector('.sel')){
-requiredGroup.style.opacity='0.6';
-setTimeout(()=>requiredGroup.style.opacity='1',300);
-return;
+if(requiredGroup && isValid){
+isValid=requiredGroup.querySelector('.sel')!==null;
 }
+
+if(isValid){
+btnNext.disabled=false;
+btnNext.style.opacity='1';
+btnNext.style.cursor='pointer';
+}else{
+btnNext.disabled=true;
+btnNext.style.opacity='0.5';
+btnNext.style.cursor='not-allowed';
+}
+}
+
+function goNext(){
+// Check if button is disabled
+const btnNext=document.getElementById('btnNext');
+if(btnNext.disabled)return;
 
 if(current<total-1){
 current++;
@@ -496,6 +495,7 @@ opt.addEventListener('click',()=>{
 group.querySelectorAll('.opt').forEach(o=>o.classList.remove('sel'));
 opt.classList.add('sel');
 answers[id]=opt.querySelector('.opt-title').textContent;
+checkNextButton();
 });
 });
 });
@@ -519,12 +519,7 @@ if(el){
 el.addEventListener('input',()=>{
 answers[id]=el.value.trim();
 el.style.borderColor='';
-});
-// Скролл к полю при фокусе
-el.addEventListener('focus',()=>{
-setTimeout(()=>{
-el.scrollIntoView({behavior:'smooth',block:'center'});
-},300);
+checkNextButton();
 });
 }
 });
