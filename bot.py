@@ -37,7 +37,7 @@ def create_xlsx_brief(data, user_info):
     
     # Заголовки столбцов
     headers = [
-        '📅 Дата', '🆔 ID', '👤 Имя', '📧 Контакт',
+        '📅 Дата', '🆔 ID', '👤 Имя', '📱 Username', '📧 Контакт',
         '🏢 Компания', '💼 Деятельность', '🌐 Текущий сайт',
         '🎯 Задача', '📱 Тип сайта', '📊 Страниц', '📑 Разделы',
         '👥 Аудитория', '🎯 Цели',
@@ -57,10 +57,12 @@ def create_xlsx_brief(data, user_info):
     
     # Данные
     now = datetime.now()
+    username = f"@{user_info.get('username')}" if user_info.get('username') else '—'
     row_data = [
         now.strftime('%d.%m.%Y %H:%M'),
         user_info.get('id', ''),
         user_info.get('name', ''),
+        username,
         data.get('q20', ''),
         data.get('q1', ''),
         data.get('q2', ''),
@@ -94,25 +96,26 @@ def create_xlsx_brief(data, user_info):
     ws.column_dimensions['A'].width = 16  # Дата
     ws.column_dimensions['B'].width = 12  # ID
     ws.column_dimensions['C'].width = 18  # Имя
-    ws.column_dimensions['D'].width = 20  # Контакт
-    ws.column_dimensions['E'].width = 20  # Компания
-    ws.column_dimensions['F'].width = 35  # Деятельность
-    ws.column_dimensions['G'].width = 20  # Сайт
-    ws.column_dimensions['H'].width = 22  # Задача
-    ws.column_dimensions['I'].width = 20  # Тип сайта
-    ws.column_dimensions['J'].width = 14  # Страниц
-    ws.column_dimensions['K'].width = 30  # Разделы
-    ws.column_dimensions['L'].width = 30  # Аудитория
-    ws.column_dimensions['M'].width = 25  # Цели
-    ws.column_dimensions['N'].width = 30  # Примеры
-    ws.column_dimensions['O'].width = 25  # Стиль
-    ws.column_dimensions['P'].width = 20  # Цвета
-    ws.column_dimensions['Q'].width = 30  # Функции
-    ws.column_dimensions['R'].width = 22  # Разработка
-    ws.column_dimensions['S'].width = 25  # Материалы
-    ws.column_dimensions['T'].width = 16  # Сроки
-    ws.column_dimensions['U'].width = 20  # Бюджет
-    ws.column_dimensions['V'].width = 35  # Дополнительно
+    ws.column_dimensions['D'].width = 18  # Username
+    ws.column_dimensions['E'].width = 20  # Контакт
+    ws.column_dimensions['F'].width = 20  # Компания
+    ws.column_dimensions['G'].width = 35  # Деятельность
+    ws.column_dimensions['H'].width = 20  # Сайт
+    ws.column_dimensions['I'].width = 22  # Задача
+    ws.column_dimensions['J'].width = 20  # Тип сайта
+    ws.column_dimensions['K'].width = 14  # Страниц
+    ws.column_dimensions['L'].width = 30  # Разделы
+    ws.column_dimensions['M'].width = 30  # Аудитория
+    ws.column_dimensions['N'].width = 25  # Цели
+    ws.column_dimensions['O'].width = 30  # Примеры
+    ws.column_dimensions['P'].width = 25  # Стиль
+    ws.column_dimensions['Q'].width = 20  # Цвета
+    ws.column_dimensions['R'].width = 30  # Функции
+    ws.column_dimensions['S'].width = 22  # Разработка
+    ws.column_dimensions['T'].width = 25  # Материалы
+    ws.column_dimensions['U'].width = 16  # Сроки
+    ws.column_dimensions['V'].width = 20  # Бюджет
+    ws.column_dimensions['W'].width = 35  # Дополнительно
     
     # Высота строк
     ws.row_dimensions[1].height = 35
@@ -129,6 +132,7 @@ def create_xlsx_brief(data, user_info):
 
 def format_message(data, user_info):
     """Форматирует красивое сообщение с брифом"""
+    username = f"@{user_info.get('username')}" if user_info.get('username') else '—'
     msg = f"""
 ╔═══════════════════════════════════╗
 ║  📋 <b>НОВАЯ ЗАЯВКА НА ДИЗАЙН САЙТА</b>  ║
@@ -136,6 +140,7 @@ def format_message(data, user_info):
 
 👤 <b>КЛИЕНТ</b>
 ├ Имя: {data.get('q19', '—')}
+├ Username: {username}
 ├ Контакт: {data.get('q20', '—')}
 └ ID: <code>{user_info.get('id', '—')}</code>
 
